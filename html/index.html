@@ -1,1 +1,538 @@
-test
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>JavaScript & Vue 강의안</title>
+  <style>
+    :root {
+      --bg: #0b0f19;
+      --card: #111827;
+      --text: #e5e7eb;
+      --muted: #9ca3af;
+      --border: #243041;
+      --accent: #60a5fa;
+      --accent2: #34d399;
+      --codebg: #0a1220;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --text: #111827;
+        --muted: #4b5563;
+        --border: #e5e7eb;
+        --accent: #2563eb;
+        --accent2: #059669;
+        --codebg: #f3f4f6;
+      }
+    }
+
+    html,
+    body {
+      height: 100%;
+    }
+
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Noto Sans KR", Arial, "Apple SD Gothic Neo", sans-serif;
+      background: radial-gradient(1200px 600px at 10% 0%, rgba(96, 165, 250, .18), transparent 55%),
+        radial-gradient(900px 500px at 90% 10%, rgba(52, 211, 153, .14), transparent 60%),
+        var(--bg);
+      color: var(--text);
+      line-height: 1.65;
+    }
+
+    .container {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    header {
+      background: linear-gradient(135deg, rgba(96, 165, 250, .14), rgba(52, 211, 153, .10));
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px 18px 14px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .18);
+    }
+
+    h1 {
+      margin: 0 0 6px;
+      font-size: 28px;
+      letter-spacing: -0.3px;
+    }
+
+    .sub {
+      color: var(--muted);
+      font-size: 14px;
+      margin: 0;
+    }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+      align-items: center;
+    }
+
+    .btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--card);
+      color: var(--text);
+      border-radius: 12px;
+      padding: 10px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: transform .06s ease, border-color .2s ease, box-shadow .2s ease;
+      user-select: none;
+    }
+
+    .btn:hover {
+      border-color: rgba(96, 165, 250, .55);
+      box-shadow: 0 8px 18px rgba(0, 0, 0, .16);
+    }
+
+    .btn:active {
+      transform: translateY(1px);
+    }
+
+    .btn.accent {
+      border-color: rgba(96, 165, 250, .6);
+    }
+
+    .btn.accent2 {
+      border-color: rgba(52, 211, 153, .6);
+    }
+
+    .note {
+      margin-top: 10px;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .card {
+      background: rgba(17, 24, 39, .78);
+      backdrop-filter: blur(6px);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 18px;
+      margin-top: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, .16);
+    }
+
+    @media (prefers-color-scheme: light) {
+      .card {
+        background: rgba(255, 255, 255, .86);
+      }
+    }
+
+    h2 {
+      margin: 0 0 8px;
+      font-size: 20px;
+      letter-spacing: -0.2px;
+    }
+
+    h3 {
+      margin: 12px 0 6px;
+      font-size: 16px;
+      color: var(--text);
+      letter-spacing: -0.1px;
+    }
+
+    hr {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 16px 0;
+    }
+
+    ul {
+      margin: 8px 0 0 18px;
+    }
+
+    li {
+      margin: 4px 0;
+    }
+
+    blockquote {
+      margin: 10px 0 0;
+      padding: 10px 12px;
+      border-left: 3px solid rgba(96, 165, 250, .65);
+      background: rgba(96, 165, 250, .08);
+      color: var(--text);
+      border-radius: 10px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      font-size: 12px;
+      color: var(--muted);
+      background: rgba(0, 0, 0, .08);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+
+    @media (min-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .kpi {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 10px;
+    }
+
+    .kpi .pill strong {
+      color: var(--text);
+      font-weight: 650;
+    }
+
+    .summary-flow {
+      font-size: 15px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px dashed rgba(96, 165, 250, .55);
+      background: rgba(96, 165, 250, .06);
+      margin-top: 10px;
+      white-space: pre-wrap;
+    }
+
+    code.inline {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      background: rgba(0, 0, 0, .14);
+      border: 1px solid var(--border);
+      padding: 1px 6px;
+      border-radius: 8px;
+      font-size: 0.95em;
+    }
+
+    pre {
+      margin: 12px 0 0;
+      padding: 12px 12px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      background: var(--codebg);
+      overflow: auto;
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    pre code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+
+    .footer {
+      margin-top: 18px;
+      color: var(--muted);
+      font-size: 12px;
+      text-align: center;
+    }
+
+    details {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, .06);
+    }
+
+    details summary {
+      cursor: pointer;
+      font-weight: 650;
+      color: var(--text);
+      list-style: none;
+    }
+
+    details summary::-webkit-details-marker {
+      display: none;
+    }
+
+    details .muted {
+      margin-top: 6px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <header>
+      <h1>JavaScript &amp; Vue 강의안</h1>
+      <p class="sub">로컬 HTML 파일 + 크롬 DevTools(콘솔) 중심으로 진행하는 강의 자료</p>
+
+      <div class="toolbar">
+        <button class="btn accent" id="btnConsole">console.log 테스트</button>
+        <button class="btn accent2" id="btnClear">console.clear</button>
+        <button class="btn" id="btnToggleAll">Day 섹션 펼치기/접기</button>
+      </div>
+      <p class="note">
+        사용법: 이 파일을 크롬으로 열고 <strong>F12</strong> → <strong>Console</strong> 탭에서 출력 확인.
+        버튼을 눌러 콘솔 동작을 바로 테스트할 수 있습니다.
+      </p>
+
+      <div class="kpi">
+        <span class="pill"><strong>대상</strong>&nbsp;마이스터고등학교</span>
+        <span class="pill"><strong>총 시간</strong>&nbsp;24시간</span>
+        <span class="pill"><strong>프레임워크</strong>&nbsp;Vue 3</span>
+      </div>
+    </header>
+
+    <section class="card" id="sec-summary">
+      <h2>강의 성격 요약</h2>
+      <p>
+        이 강의는 <strong>Vue를 깊게 다루는 강의가 아니라</strong>,
+        <strong>JavaScript를 구조적으로 다루는 능력을 기르는 강의</strong>이며
+        Vue는 프레임워크의 역할을 이해하기 위한 <strong>마지막 맛보기 단계</strong>로 사용한다.
+      </p>
+      <hr />
+      <h2>강의 개요</h2>
+      <ul>
+        <li>대상: 마이스터고등학교</li>
+        <li>총 수업 시간: 24시간
+          <ul>
+            <li>월요일: 3시간</li>
+            <li>화·수·목요일: 6시간</li>
+            <li>금요일: 3시간</li>
+          </ul>
+        </li>
+        <li>프레임워크: Vue.js (Vue 3)</li>
+      </ul>
+    </section>
+
+    <div class="grid">
+      <section class="card day" data-day="1">
+        <h2>Day 1. 실행환경과 개발 도구 이해 (월 3시간)</h2>
+        <blockquote>코드를 배우기 전에, 코드는 어디서 어떻게 실행되는가를 이해한다.</blockquote>
+
+        <h3>주요 내용</h3>
+        <ul>
+          <li>개발이란 무엇인가</li>
+          <li>프로그램 실행의 기본 구조</li>
+          <li>JavaScript 실행 환경
+            <ul>
+              <li>브라우저</li>
+            </ul>
+          </li>
+          <li>HTML + JavaScript 실행 흐름</li>
+          <li><code class="inline">&lt;script&gt;</code> 태그 실행 순서</li>
+          <li>크롬 개발자 도구(DevTools)
+            <ul>
+              <li>Console 중심</li>
+            </ul>
+          </li>
+          <li>실습
+            <ul>
+              <li>HTML 파일 실행</li>
+              <li>console.log 확인</li>
+            </ul>
+          </li>
+        </ul>
+
+        <details>
+          <summary>Day 1 콘솔 실습(예시 코드)</summary>
+          <p class="muted">DevTools Console에서 출력이 보이는지 확인.</p>
+          <pre><code>console.log("Day 1: console.log 테스트");
+console.log({ now: new Date().toISOString(), userAgent: navigator.userAgent });</code></pre>
+        </details>
+      </section>
+
+      <section class="card day" data-day="2">
+        <h2>Day 2. JavaScript 기초 문법 &amp; 객체 (화 6시간)</h2>
+
+        <h3>핵심 메시지</h3>
+        <p>JavaScript로 동작하는 프로그램을 만든다.</p>
+
+        <h3>주요 내용</h3>
+        <ul>
+          <li>let / const</li>
+          <li>기본 자료형</li>
+          <li>함수</li>
+          <li>객체(Object)</li>
+          <li>객체의 상태와 동작</li>
+          <li>이벤트 개념</li>
+          <li>간단한 DOM 조작</li>
+        </ul>
+
+        <details>
+          <summary>Day 2 예시(객체 + 이벤트)</summary>
+          <p class="muted">객체의 상태/동작을 이벤트로 호출하는 구조를 확인.</p>
+          <pre><code>const counter = {
+  value: 0,
+  inc() {
+    this.value += 1;
+    console.log("counter.value =", this.value);
+  }
+};
+
+// 버튼 클릭 이벤트에서 counter.inc() 호출
+// (버튼은 강의 진행 중 직접 추가/연동)</code></pre>
+        </details>
+      </section>
+
+      <section class="card day" data-day="3">
+        <h2>Day 3. JavaScript 클래스 집중 (수 6시간)</h2>
+
+        <h3>핵심 메시지</h3>
+        <p>코드를 구조로 묶는 방법을 배운다.</p>
+
+        <h3>주요 내용</h3>
+        <ul>
+          <li>클래스 문법</li>
+          <li>constructor</li>
+          <li>메서드</li>
+          <li>인스턴스</li>
+          <li>상태(state) 개념</li>
+          <li>클래스 기반 코드 작성</li>
+          <li>클래스 + DOM 연동</li>
+          <li>객체 방식 vs 클래스 방식 비교</li>
+        </ul>
+
+        <details>
+          <summary>Day 3 예시(클래스 기본 형태)</summary>
+          <pre><code>class Counter {
+  constructor() {
+    this.value = 0; // state
+  }
+  inc() {
+    this.value += 1;
+    console.log("Counter.value =", this.value);
+  }
+}
+
+const c = new Counter();
+c.inc();</code></pre>
+        </details>
+      </section>
+
+      <section class="card day" data-day="4">
+        <h2>Day 4. 클래스 기반 설계와 한계 체험 (목 6시간)</h2>
+
+        <h3>핵심 메시지</h3>
+        <p>잘 짠 코드도 규모가 커지면 한계가 생긴다.</p>
+
+        <h3>주요 내용</h3>
+        <ul>
+          <li>클래스 증가에 따른 복잡도</li>
+          <li>역할 분리의 필요성</li>
+          <li>상태 관리 문제</li>
+          <li>DOM 코드 증가</li>
+          <li>유지보수 어려움 체감</li>
+          <li>프레임워크가 필요한 이유 정리</li>
+        </ul>
+
+        <details>
+          <summary>Day 4 관찰 포인트</summary>
+          <ul class="muted">
+            <li>상태가 여러 위치로 흩어지는 순간을 기록한다.</li>
+            <li>수정하려고 파일/클래스를 왔다갔다 하게 되는 지점을 찾는다.</li>
+            <li>DOM 업데이트 코드가 반복되는 패턴을 찾는다.</li>
+          </ul>
+        </details>
+      </section>
+
+      <section class="card day" data-day="5">
+        <h2>Day 5. Vue.js 맛보기 (금 3시간)</h2>
+
+        <h3>핵심 메시지</h3>
+        <p>프레임워크는 문제를 해결하기 위해 존재한다.</p>
+
+        <h3>주요 내용</h3>
+        <ul>
+          <li>프레임워크 개념</li>
+          <li>Vue가 해결하는 문제</li>
+          <li>Vue 3 CDN 방식</li>
+          <li>createApp</li>
+          <li>data / methods 최소 사용</li>
+          <li>JavaScript 클래스 코드와 비교</li>
+          <li>코드 양 / 가독성 비교</li>
+          <li>Vue 프로젝트 구조 시연
+            <ul>
+              <li>App.vue</li>
+              <li><code class="inline">&lt;script setup&gt;</code> 존재 소개</li>
+            </ul>
+          </li>
+        </ul>
+
+        <details>
+          <summary>Day 5 예시(Vue 3 CDN 최소 형태)</summary>
+          <p class="muted">수업 당일 CDN 스크립트를 추가해 바로 실행해본다.</p>
+          <pre><code>&lt;!-- head 또는 body 상단에 추가 --&gt;
+&lt;script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"&gt;&lt;/script&gt;
+
+&lt;div id="app"&gt;
+  &lt;button @click="count++"&gt;증가&lt;/button&gt;
+  &lt;p&gt;count = {{ count }}&lt;/p&gt;
+&lt;/div&gt;
+
+&lt;script&gt;
+  const { createApp } = Vue;
+  createApp({
+    data() {
+      return { count: 0 };
+    }
+  }).mount("#app");
+&lt;/script&gt;</code></pre>
+        </details>
+      </section>
+    </div>
+
+    <section class="card">
+      <h2>전체 강의 흐름 요약</h2>
+      <div class="summary-flow">실행환경 이해
+        → JavaScript 기초
+        → 객체
+        → 클래스
+        → 구조화
+        → 한계 체험
+        → 프레임워크 필요성
+        → Vue 맛보기</div>
+    </section>
+
+    <div class="footer">
+      이 문서는 로컬에서 바로 실행 가능한 HTML 강의안 템플릿입니다.
+    </div>
+  </div>
+
+  <script>
+    // DevTools 테스트용 버튼
+    document.getElementById("btnConsole").addEventListener("click", () => {
+      console.log("[강의안] console.log 테스트:", {
+        time: new Date().toLocaleString(),
+        location: window.location.href
+      });
+    });
+
+    document.getElementById("btnClear").addEventListener("click", () => {
+      console.clear();
+      console.log("[강의안] console.clear 실행 완료");
+    });
+
+    // Day 섹션 details 일괄 토글
+    const allDetails = Array.from(document.querySelectorAll("details"));
+    let expanded = false;
+    document.getElementById("btnToggleAll").addEventListener("click", () => {
+      expanded = !expanded;
+      allDetails.forEach(d => d.open = expanded);
+    });
+  </script>
+</body>
+
+</html>
