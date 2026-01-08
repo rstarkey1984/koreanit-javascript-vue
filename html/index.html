@@ -281,7 +281,6 @@
       <div class="toolbar">
         <button class="btn accent" id="btnConsole">console.log 테스트</button>
         <button class="btn accent2" id="btnClear">console.clear</button>
-        <button class="btn" id="btnToggleAll">Day 섹션 펼치기/접기</button>
       </div>
       <p class="note">
         사용법: 이 파일을 크롬으로 열고 <strong>F12</strong> → <strong>Console</strong> 탭에서 출력 확인.
@@ -523,14 +522,6 @@ c.inc();</code></pre>
     document.getElementById("btnClear").addEventListener("click", () => {
       console.clear();
       console.log("[강의안] console.clear 실행 완료");
-    });
-
-    // Day 섹션 details 일괄 토글
-    const allDetails = Array.from(document.querySelectorAll("details"));
-    let expanded = false;
-    document.getElementById("btnToggleAll").addEventListener("click", () => {
-      expanded = !expanded;
-      allDetails.forEach(d => d.open = expanded);
     });
   </script>
 </body>
