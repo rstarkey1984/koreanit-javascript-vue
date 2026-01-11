@@ -4,572 +4,663 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Day 3 — DOM과 이벤트 기반 UI 제어</title>
-  <link rel="stylesheet" href="css/common.css">
+  <title>3일차 — DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</title>
+  <link rel="stylesheet" href="css/common.css" />
 </head>
 
 <body>
+  <div class="topbar">
+    <button class="btn" data-toggle-sidebar type="button">목차</button>
+    <div style="font-weight:700">3일차 — DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</div>
+  </div>
+
   <div class="layout">
     <aside class="sidebar" aria-label="강의안 내비게이션">
-      <div class="brand">
-        <div class="kicker">JavaScript 강의안</div>
-        <div class="title">목차</div>
-      </div>
       <nav class="nav">
-        <a class="" href="index.html">강의 개요</a>
-        <a class="" href="1.html">Day 1 — 실행환경과 JavaScript 실행 흐름 이해</a>
-        <a class="" href="2.html">Day 2 — JavaScript 데이터와 이벤트의 기본 구조</a>
-        <a class="active" href="3.html">Day 3 — DOM과 이벤트 기반 UI 제어</a>
-        <a class="" href="4.html">Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
-        <a class="" href="5.html">Day 5 — Vue.js 실습 (CDN 방식)</a>
-        <div class="small">파일 기준: 3.md</div>
+        <a href="index.html">전체개요 — JavaScript 강의안</a>
+        <a href="1.html">1일차 — 실행환경과 JavaScript 실행 흐름 이해</a>
+        <a href="2.html">2일차 — JavaScript 데이터와 이벤트의 기본 구조</a>
+        <a href="3.html">3일차 — DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</a>
+        <a href="4.html">4일차 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
+        <a href="5.html">5일차 — Vue.js 실습 (CDN 방식)</a>
       </nav>
     </aside>
 
     <main class="main">
-      <div class="topbar">
-        <h1 class="page-title">Day 3</h1>
-        <span class="badge">HTML 문서</span>
-      </div>
-
-      <article class="content">
-        <h1>DOM과 이벤트 기반 UI 제어</h1>
-
-        <hr />
-
-        <h2>강의 목표</h2>
-
-        <blockquote>
-          <p>오늘은 JavaScript가 <strong>화면(UI)을 직접 제어하는 방식</strong>을 이해한다.</p>
-        </blockquote>
-
-        <ul>
-          <li>DOM의 개념을 설명할 수 있다</li>
-          <li>이벤트 → 함수 → DOM 변경 흐름을 이해한다</li>
-          <li>JavaScript로 화면(UI)을 직접 제어할 수 있다</li>
-        </ul>
-
-        <p>Day 3은 <strong>JavaScript가 실제로 웹페이지를 움직이기 시작하는 날</strong>이다.</p>
-
-        <hr />
-
-        <h2>전체 실습 폴더 구조</h2>
-
-        <div class="codehilite">
-          <pre><span></span><code>day3/
+      <div class="container">
+        <h1 class="page-title">3일차</h1>
+        <article class="content">
+          <h1>DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</h1>
+          <hr />
+          <h2>강의 목표</h2>
+          <blockquote>
+            <p>오늘은 JavaScript가 <strong>화면(UI)을 직접 제어하는 방식</strong>을 이해한다.</p>
+          </blockquote>
+          <ul>
+            <li>DOM의 개념을 설명할 수 있다</li>
+            <li><code>document</code>와 DOM 요소의 관계를 이해한다</li>
+            <li>이벤트 → 함수 → DOM 변경 흐름을 이해한다</li>
+            <li>JavaScript로 화면(UI)을 직접 제어할 수 있다</li>
+            <li>서버에서 받은 데이터를 DOM으로 연결할 수 있다</li>
+          </ul>
+          <hr />
+          <h2>전체 실습 폴더 구조</h2>
+          <pre><code class="language-text">day3/
  ├─ 2-dom-basic.html
  ├─ 3-dom-select.html
  ├─ 4-dom-change.html
  ├─ 5-event-dom.html
- └─ 6-ui-flow.html
+ ├─ 6-ui-flow.html
+ └─ 7-fetch-posts.html
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h2>1. DOM(Document Object Model)</h2>
-
-        <blockquote>
-          <p>DOM은 브라우저가 HTML을 해석해 만든 <strong>문서 객체 구조</strong>다.</p>
-        </blockquote>
-
-        <ul>
-          <li>브라우저는 HTML을 그대로 화면에 그리지 않는다</li>
-          <li>HTML을 해석해 <strong>DOM 객체 트리</strong>를 만든 뒤</li>
-          <li>이 DOM을 기준으로 화면을 그린다</li>
-        </ul>
-
-        <p>👉 JavaScript는 <strong>DOM 객체를 통해서만 화면에 접근</strong>할 수 있다.</p>
-
-        <hr />
-
-        <h2>2. DOM 기본 확인</h2>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>2-dom-basic.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>DOM 테스트<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>이 문장은 DOM 요소다<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">);</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">);</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+          <hr />
+          <h2>1. DOM(Document Object Model)</h2>
+          <p>DOM은 <strong>브라우저가 HTML을 해석해서 만든 문서 객체 구조</strong>다.</p>
+          <ul>
+            <li>HTML 파일은 그대로 화면에 그려지지 않는다</li>
+            <li>브라우저는 HTML을 읽어 DOM 객체 트리를 만든다</li>
+            <li>화면은 DOM을 기준으로 렌더링된다</li>
+            <li>JavaScript는 DOM 객체를 통해서만 화면에 접근한다</li>
+          </ul>
+          <pre><code class="language-text">HTML 파일
+→ 브라우저가 해석
+→ DOM 객체 트리 생성
+→ 화면 렌더링
 </code></pre>
-        </div>
+          <hr />
+          <h2>2. DOM 기본 확인</h2>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>2-dom-basic.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
 
-        <h3>준비</h3>
+&lt;h1&gt;DOM 테스트&lt;/h1&gt;
+&lt;p&gt;이 문장은 DOM 요소다&lt;/p&gt;
 
-        <ul>
-          <li>브라우저에서 파일을 연다</li>
-          <li>개발자도구(F12) → Console 탭을 켜둔다</li>
-        </ul>
+&lt;script&gt;
+  console.log(document);
+  console.log(document.body);
+&lt;/script&gt;
 
-        <hr />
-
-        <h3>Step 1. <code>document</code> 출력해보기</h3>
-
-        <ol>
-          <li>새로고침(F5) 한다</li>
-          <li>콘솔에 <code>document</code>가 출력되는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>객체 형태로 길게 출력되면 정상</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. <code>document.body</code> 출력해보기</h3>
-
-        <ol>
-          <li>콘솔에 <code>document.body</code>가 출력되는지 확인한다</li>
-          <li>출력된 결과에서 <code>&lt;body&gt;...&lt;/body&gt;</code> 형태가 보이는지 본다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li><code>&lt;body&gt;</code> 태그가 DOM 객체로 잡혔으면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습 정리</h3>
-
-        <ul>
-          <li>브라우저 안에는 <code>document</code>라는 객체가 항상 존재한다</li>
-          <li><code>document.body</code>는 화면의 <code>&lt;body&gt;</code> 영역을 가리킨다</li>
-          <li>JavaScript는 <strong>document를 통해서만 화면에 접근</strong>한다</li>
-        </ul>
-
-        <hr />
-
-        <h2>3. HTML 요소 선택</h2>
-
-        <blockquote>
-          <p>DOM 조작의 첫 단계는 <strong>원하는 요소를 정확히 찾는 것</strong>이다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>3-dom-select.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>제목<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;item&quot;</span><span class="p">&gt;</span>첫 번째<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">p</span> <span class="na">class</span><span class="o">=</span><span class="s">&quot;item&quot;</span><span class="p">&gt;</span>두 번째<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">item</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">querySelector</span><span class="p">(</span><span class="s2">&quot;.item&quot;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">title</span><span class="p">);</span>
-<span class="w">  </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">item</span><span class="p">);</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <h3>준비</h3>
+          <ul>
+            <li>브라우저에서 파일을 연다</li>
+            <li>개발자도구(F12)를 열고 Console 탭을 켠다</li>
+          </ul>
+          <hr />
+          <h3>Step 1. document 객체 확인</h3>
+          <ol>
+            <li>파일을 새로고침한다</li>
+            <li>콘솔에 <code>document</code>가 출력되는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>객체 형태로 길게 출력되면 정상</li>
+            <li>이 객체가 현재 웹페이지 전체를 대표한다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. document.body 확인</h3>
+          <ol>
+            <li>콘솔에 <code>document.body</code>가 출력되는지 확인한다</li>
+            <li><code>&lt;body&gt;...&lt;/body&gt;</code> 형태가 보이는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>&lt;body&gt;</code> 영역이 DOM 객체로 잡히면 성공</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>브라우저에는 항상 <code>document</code> 객체가 존재한다</li>
+            <li><code>document.body</code>는 화면에 보이는 영역이다</li>
+            <li>JavaScript는 document를 통해서만 화면에 접근한다</li>
+          </ul>
+          <hr />
+          <h2>3. HTML 요소 선택</h2>
+          <p>DOM을 제어하려면 <strong>먼저 원하는 요소를 정확히 선택</strong>해야 한다.</p>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>3-dom-select.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
 
-        <h3>준비</h3>
+&lt;h1 id=&quot;title&quot;&gt;제목&lt;/h1&gt;
+&lt;p class=&quot;item&quot;&gt;첫 번째&lt;/p&gt;
+&lt;p class=&quot;item&quot;&gt;두 번째&lt;/p&gt;
 
-        <ul>
-          <li>콘솔을 켜두고 진행한다</li>
-          <li>출력이 <code>null</code>이면 <strong>id/class 오타</strong>를 먼저 의심한다</li>
-        </ul>
+&lt;script&gt;
+  const title = document.getElementById(&quot;title&quot;);
+  const item = document.querySelector(&quot;.item&quot;);
 
-        <hr />
+  console.log(title);
+  console.log(item);
+&lt;/script&gt;
 
-        <h3>Step 1. id로 요소 선택</h3>
-
-        <ol>
-          <li><code>getElementById("title")</code>를 그대로 실행한다</li>
-          <li>콘솔에 <code>title</code>이 출력되는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>콘솔에 <code>&lt;h1 id="title"&gt;...</code> 형태가 보이면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. CSS 선택자로 요소 선택</h3>
-
-        <ol>
-          <li><code>querySelector(".item")</code>를 그대로 실행한다</li>
-          <li>콘솔에 <code>item</code>이 출력되는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>첫 번째 <code>&lt;p class="item"&gt;첫 번째&lt;/p&gt;</code>가 잡히면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 선택 실패 상황 확인(중요)</h3>
-
-        <ol>
-          <li>일부러 <code>getElementById("titl")</code>처럼 오타를 내본다</li>
-          <li>콘솔 결과가 <code>null</code>로 바뀌는지 확인한다</li>
-          <li>다시 원래대로 고쳐서 정상 출력으로 되돌린다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li><code>null</code>은 "선택 실패" 신호다</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>DOM 조작의 시작은 <strong>요소를 변수에 담는 것</strong>이다</li>
-          <li>콘솔에 태그가 보이면 선택에 성공한 상태다</li>
-          <li><code>null</code>이면 오타 또는 script 위치 문제를 점검한다</li>
-        </ul>
-
-        <hr />
-
-        <h2>4. DOM 내용과 스타일 변경</h2>
-
-        <blockquote>
-          <p>DOM 객체의 값을 바꾸면 화면에 바로 반영된다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>4-dom-change.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>변경 전<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="nx">title</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;변경 후&quot;</span><span class="p">;</span>
-<span class="w">  </span><span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">;</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. id로 요소 선택</h3>
+          <ol>
+            <li><code>getElementById(&quot;title&quot;)</code>를 실행한다</li>
+            <li>콘솔에 <code>&lt;h1 id=&quot;title&quot;&gt;</code>가 출력되는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>태그가 보이면 선택 성공</li>
+          </ul>
+          <hr />
+          <h3>Step 2. CSS 선택자로 요소 선택</h3>
+          <ol>
+            <li><code>querySelector(&quot;.item&quot;)</code>를 실행한다</li>
+            <li>첫 번째 <code>&lt;p&gt;</code> 요소가 출력되는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>querySelector</code>는 조건에 맞는 요소 하나만 선택한다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 선택 실패 상황 확인</h3>
+          <ol>
+            <li>id를 일부러 틀려본다</li>
+            <li>콘솔 출력이 <code>null</code>인지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>null</code>은 에러가 아니라 선택 실패 신호다</li>
+            <li>오타 또는 script 위치를 점검해야 한다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>DOM 조작의 시작은 요소를 변수에 담는 것이다</li>
+            <li>콘솔에 태그가 보이면 성공</li>
+            <li><code>null</code>이면 선택 실패다</li>
+          </ul>
+          <hr />
+          <h2>4. DOM 내용과 스타일 변경</h2>
+          <p>DOM 객체의 값을 바꾸면 화면은 즉시 바뀐다.</p>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>4-dom-change.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
 
-        <h3>준비</h3>
+&lt;h1 id=&quot;title&quot;&gt;변경 전&lt;/h1&gt;
 
-        <ul>
-          <li>파일을 새로고침(F5)하며 결과를 확인한다</li>
-        </ul>
+&lt;script&gt;
+  const title = document.getElementById(&quot;title&quot;);
 
-        <hr />
+  title.textContent = &quot;변경 후&quot;;
+  title.style.color = &quot;red&quot;;
+&lt;/script&gt;
 
-        <h3>Step 1. 텍스트 변경</h3>
-
-        <ol>
-          <li><code>title.textContent = "변경 후";</code> 실행</li>
-          <li>화면의 글자가 바뀌는지 확인</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>"변경 전" → "변경 후"로 바뀌면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 스타일 변경</h3>
-
-        <ol>
-          <li><code>title.style.color = "red";</code> 실행</li>
-          <li>글자 색이 바뀌는지 확인</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>글자 색이 빨간색으로 보이면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 값 바꿔보기(응용)</h3>
-
-        <ol>
-          <li><code>"변경 후"</code>를 다른 문장으로 바꿔본다</li>
-          <li><code>"red"</code>를 다른 색으로 바꿔본다(예: <code>"blue"</code>)</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>새로고침 후에도 내가 바꾼 값대로 반영되면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>DOM 객체의 값이 바뀌면 <strong>화면도 즉시 바뀐다</strong></li>
-          <li>JavaScript 한 줄이 화면을 직접 바꾼다</li>
-        </ul>
-
-        <hr />
-
-        <h2>5. 이벤트와 DOM 연결</h2>
-
-        <blockquote>
-          <p>JavaScript는 <strong>이벤트가 발생했을 때 DOM을 변경</strong>한다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>5-event-dom.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">h1</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>대기 중<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;btn&quot;</span><span class="p">&gt;</span>클릭<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">title</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;btn&quot;</span><span class="p">);</span>
-
-<span class="w">  </span><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">title</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;클릭됨&quot;</span><span class="p">;</span>
-<span class="w">    </span><span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">;</span>
-<span class="w">  </span><span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. 텍스트 변경 확인</h3>
+          <ol>
+            <li>페이지를 새로고침한다</li>
+            <li>제목 텍스트가 바뀌는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>DOM 값 변경 즉시 화면 반영</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 스타일 변경 확인</h3>
+          <ol>
+            <li>글자 색상이 변경되는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>JavaScript 한 줄로 UI가 변경된다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 값 바꿔보기</h3>
+          <ol>
+            <li>텍스트 내용을 다른 문장으로 변경한다</li>
+            <li>색상을 다른 색으로 변경한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>새로고침 후에도 변경 내용이 반영된다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>DOM 값 변경은 화면 변경으로 이어진다</li>
+            <li>JavaScript는 DOM을 통해 UI를 직접 제어한다</li>
+          </ul>
+          <hr />
+          <h2>5. 이벤트와 DOM 연결</h2>
+          <p>JavaScript는 이벤트가 발생했을 때 DOM을 변경한다.</p>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>5-event-dom.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
 
-        <h3>준비</h3>
+&lt;h1 id=&quot;title&quot;&gt;대기 중&lt;/h1&gt;
+&lt;button id=&quot;btn&quot;&gt;클릭&lt;/button&gt;
 
-        <ul>
-          <li>이번 실습은 <strong>새로고침만 해서는 아무 변화가 없다</strong></li>
-          <li>반드시 버튼을 눌러야 실행된다</li>
-        </ul>
+&lt;script&gt;
+  const title = document.getElementById(&quot;title&quot;);
+  const button = document.getElementById(&quot;btn&quot;);
 
-        <hr />
+  button.addEventListener(&quot;click&quot;, function () {
+    title.textContent = &quot;클릭됨&quot;;
+    title.style.color = &quot;blue&quot;;
+  });
+&lt;/script&gt;
 
-        <h3>Step 1. 버튼 요소가 잡히는지 확인</h3>
-
-        <ol>
-          <li><code>console.log(button)</code>을 추가해서 출력한다</li>
-          <li>콘솔에 <code>&lt;button id="btn"&gt;...</code>가 찍히는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li><code>null</code>이면 id 오타 또는 script 위치 문제</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 클릭 이벤트 연결 확인</h3>
-
-        <ol>
-          <li>버튼을 클릭한다</li>
-          <li>제목이 "클릭됨"으로 바뀌는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>클릭할 때마다 같은 결과가 반복되면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 이벤트 안에서 값 바꿔보기</h3>
-
-        <ol>
-          <li><code>"클릭됨"</code>을 다른 문장으로 바꾼다</li>
-          <li>색도 다른 색으로 바꾼다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>클릭했을 때만 화면이 바뀌면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>이벤트는 <strong>코드 실행의 출발점</strong>이다</li>
-          <li>클릭 → 함수 실행 → DOM 변경 → 화면 변경 흐름이 만들어진다</li>
-        </ul>
-
-        <hr />
-
-        <h2>6. UI 실행 흐름 완성</h2>
-
-        <blockquote>
-          <p>지금까지 배운 내용을 하나의 흐름으로 묶는다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>6-ui-flow.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;btn&quot;</span><span class="p">&gt;</span>증가<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-
-<span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">countEl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">const</span><span class="w"> </span><span class="nx">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;btn&quot;</span><span class="p">);</span>
-<span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
-
-<span class="w">  </span><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span><span class="w"> </span><span class="kd">function</span><span class="w"> </span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">    </span><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
-<span class="w">    </span><span class="nx">countEl</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="p">;</span>
-<span class="w">  </span><span class="p">});</span>
-<span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. 이벤트 실행 확인</h3>
+          <ol>
+            <li>페이지를 새로고침한다</li>
+            <li>버튼을 클릭한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>클릭하기 전에는 화면이 변하지 않는다</li>
+            <li>클릭했을 때만 변경된다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 이벤트 내부 코드 수정</h3>
+          <ol>
+            <li>텍스트 내용을 다른 문장으로 바꾼다</li>
+            <li>색상을 변경한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>이벤트가 발생했을 때만 코드가 실행된다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>이벤트는 코드 실행의 출발점이다</li>
+            <li>클릭 → 함수 실행 → DOM 변경 → 화면 변경</li>
+          </ul>
+          <hr />
+          <h2>6. UI 실행 흐름 완성</h2>
+          <blockquote>
+            <p>핵심은 <strong>데이터(상태)</strong> 와 <strong>화면(DOM)</strong> 을
+              JavaScript 코드가 어떻게 연결하는지 이해하는 것이다.</p>
+          </blockquote>
+          <h3>이 실습에서 확인할 것</h3>
+          <ul>
+            <li>화면에 보이는 값은 <strong>데이터의 결과</strong>다</li>
+            <li>데이터가 바뀌지 않으면 화면도 바뀌지 않는다</li>
+            <li>데이터가 바뀌어도 DOM을 갱신하지 않으면 화면은 그대로다</li>
+          </ul>
+          <p>즉,</p>
+          <blockquote>
+            <p><strong>데이터 변경과 화면 반영은 서로 다른 단계</strong>다.</p>
+          </blockquote>
+          <hr />
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>6-ui-flow.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html&gt;
+&lt;body&gt;
 
-        <h3>준비</h3>
+&lt;p id=&quot;count&quot;&gt;0&lt;/p&gt;
+&lt;button id=&quot;btn&quot;&gt;증가&lt;/button&gt;
 
-        <ul>
-          <li><code>count</code>는 숫자 데이터(상태)</li>
-          <li><code>countEl</code>은 화면에 보이는 영역(DOM)</li>
-        </ul>
+&lt;script&gt;
+  const countEl = document.getElementById(&quot;count&quot;);
+  const button = document.getElementById(&quot;btn&quot;);
+  let count = 0;
 
-        <hr />
+  button.addEventListener(&quot;click&quot;, function () {
+    count = count + 1;
+    countEl.textContent = count;
+  });
+&lt;/script&gt;
 
-        <h3>Step 1. 클릭하면 숫자가 바뀌는지 확인</h3>
-
-        <ol>
-          <li>버튼을 여러 번 클릭한다</li>
-          <li>숫자가 1씩 증가하는지 확인한다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>0 → 1 → 2 → 3 … 으로 증가하면 성공</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 데이터와 화면의 연결 확인</h3>
-
-        <ol>
-          <li><code>count = count + 1;</code> 줄을 잠깐 주석 처리한다</li>
-          <li>클릭해도 화면이 안 바뀌는지 확인한다</li>
-          <li>주석을 풀어 다시 정상 동작으로 되돌린다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>데이터가 안 바뀌면 화면도 바뀌지 않는다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 화면 업데이트 줄 확인</h3>
-
-        <ol>
-          <li><code>countEl.textContent = count;</code> 줄을 잠깐 주석 처리한다</li>
-          <li>클릭하면 count는 바뀌지만 화면은 안 바뀌는지 확인한다</li>
-          <li>주석을 풀어 다시 정상 동작으로 되돌린다</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>데이터 변경과 화면 반영은 다른 단계다</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>사용자 행동이 이벤트를 만든다</li>
-          <li>이벤트가 함수 실행을 시작한다</li>
-          <li>함수가 데이터를 바꾸고</li>
-          <li>DOM을 통해 화면이 바뀐다</li>
-        </ul>
-
-        <hr />
-
-        <h2>Day 3 실행 흐름 정리</h2>
-
-        <div class="codehilite">
-          <pre><span></span><code>이벤트
-→ 함수 실행
-→ 데이터 변경
-→ DOM 변경
-→ 화면 반영
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. 상태 변화 확인</h3>
+          <ol>
+            <li>버튼을 여러 번 클릭한다</li>
+            <li>숫자가 증가하는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>데이터(count)와 화면(countEl)이 연결된다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 데이터 변경 주석 처리</h3>
+          <ol>
+            <li><code>count = count + 1;</code>을 주석 처리한다</li>
+            <li>클릭 시 화면이 바뀌는지 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>데이터가 바뀌지 않으면 화면도 바뀌지 않는다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 화면 업데이트 주석 처리</h3>
+          <ol>
+            <li><code>countEl.textContent = count;</code>를 주석 처리한다</li>
+            <li>클릭 시 숫자 변화 여부를 확인한다</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>데이터 변경과 화면 반영은 다른 단계다</li>
+          </ul>
+          <hr />
+          <h3>Step 4. 화면에 없는 DOM을 새로 만들어보기 (createElement)</h3>
+          <blockquote>
+            <p>지금까지는 <strong>이미 존재하는 DOM</strong>만 수정했다.
+              이제는 <strong>화면에 없는 DOM 구조를 직접 만들어서 붙이는 방법</strong>을 확인한다.</p>
+          </blockquote>
+          <p>이번 Step에서는 <strong><code>li</code>를 만들기 전에, 먼저 <code>ul</code>부터 만든다.</strong></p>
+          <pre><code class="language-javascript">// 1) ul 요소를 새로 만든다
+const ul = document.createElement(&quot;ul&quot;);
 
-        <hr />
+// 2) li 요소를 새로 만든다
+const li = document.createElement(&quot;li&quot;);
+li.textContent = &quot;새로 만든 항목&quot;;
 
-        <h2>오늘의 핵심 정리</h2>
+// 3) li를 ul에 먼저 붙인다
+ul.appendChild(li);
 
-        <ul>
-          <li>DOM은 브라우저가 만든 화면 구조 객체다</li>
-          <li>JavaScript는 DOM을 통해서만 화면을 바꾼다</li>
-          <li>이벤트는 실행의 출발점이다</li>
-          <li>UI는 <strong>이벤트에 반응해서 동작</strong>한다</li>
-        </ul>
+// 4) 완성된 ul을 document.body에 붙인다
+document.body.appendChild(ul);
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>createElement</code>는 <strong>화면에 없는 요소를 메모리에서 생성</strong>한다</li>
+            <li>DOM 구조는 <strong>부모 → 자식 순서</strong>로 만들어야 한다</li>
+            <li><code>appendChild</code>로 DOM 트리에 붙이는 순간 화면에 나타난다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>기존 DOM 수정: <code>textContent</code>, <code>style</code></li>
+            <li>새 DOM 생성: <code>createElement</code></li>
+            <li>화면 반영의 기준은 항상 <strong>DOM 트리에 붙였는가</strong>다</li>
+          </ul>
+          <hr />
+          <h2>7. 서버와 데이터 통신</h2>
+          <hr />
+          <h3>핵심 개념 한 줄 요약</h3>
+          <blockquote>
+            <p>서버에서 오는 데이터는
+              <strong>텍스트 → JSON → JavaScript 객체 → DOM → 화면</strong>
+              이 순서를 반드시 거친다.
+            </p>
+          </blockquote>
+          <hr />
+          <h3>반드시 기억해야 할 핵심 포인트</h3>
+          <ol>
+            <li>네트워크로 전달되는 것은 <strong>항상 텍스트(TEXT)</strong> 다.</li>
+            <li><code>fetch()</code>의 결과는 데이터가 아니라 <strong>응답 객체(response)</strong> 다.</li>
+            <li>서버 응답은 먼저 <strong>문자열(text)</strong> 로 받아진다.</li>
+            <li>문자열은 <strong>JSON 규칙</strong>으로 변환해야 객체로 사용할 수 있다.</li>
+            <li>데이터가 있어도 <strong>DOM에 붙이지 않으면 화면에 나오지 않는다.</strong></li>
+          </ol>
+          <hr />
+          <h3>서버 응답 처리 흐름</h3>
+          <pre><code class="language-text">fetch 요청
+→ response 객체
+→ response.text()  (문자열)
+→ JSON.parse()     (객체/배열)
+→ DOM 생성
+→ appendChild()
+→ 화면 출력
+</code></pre>
+          <p>실제 개발에서는 보통 아래 방식으로 사용한다.</p>
+          <pre><code class="language-javascript">const data = await response.json();
+</code></pre>
+          <hr />
+          <h3>JSON의 정체</h3>
+          <ul>
+            <li>JSON은 <strong>데이터 전송을 위한 텍스트 규칙</strong>이다</li>
+            <li>실행되는 코드가 아니다</li>
+            <li>데이터 구조만 표현한다</li>
+          </ul>
+          <p>특징</p>
+          <ul>
+            <li>전체는 객체 <code>{ }</code></li>
+            <li>키는 항상 문자열</li>
+            <li>값은 숫자, 문자열, boolean, 객체, 배열 가능</li>
+            <li>함수, 변수 선언은 존재하지 않는다</li>
+          </ul>
+          <hr />
+          <h3>JSON과 JavaScript 객체의 차이</h3>
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>JSON</th>
+                <th>JavaScript 객체</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>위치</td>
+                <td>네트워크 / 파일</td>
+                <td>메모리</td>
+              </tr>
+              <tr>
+                <td>목적</td>
+                <td>전송·저장</td>
+                <td>실행·처리</td>
+              </tr>
+              <tr>
+                <td>형태</td>
+                <td>문자열 규칙</td>
+                <td>실제 객체</td>
+              </tr>
+              <tr>
+                <td>실행</td>
+                <td>불가능</td>
+                <td>가능</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+          <h2>실습 가이드 — 서버 데이터 → 화면 출력</h2>
+          <p>📄 파일명: <code>7-fetch-posts.html</code></p>
+          <h3>실습 목표</h3>
+          <ul>
+            <li>서버 응답이 문자열이라는 것을 확인한다</li>
+            <li>JSON → JavaScript 객체 변환을 이해한다</li>
+            <li>서버 데이터를 DOM으로 옮겨 화면에 출력한다</li>
+          </ul>
+          <hr />
+          <h3>기본 틀</h3>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;body&gt;
 
-        <div class="footer">© 2026 한국IT교육원. All rights reserved.</div>
-      </article>
+  &lt;h2&gt;게시글 목록&lt;/h2&gt;
+  &lt;button id=&quot;load&quot;&gt;불러오기&lt;/button&gt;
+  &lt;ul id=&quot;list&quot;&gt;&lt;/ul&gt;
+
+  &lt;script&gt;
+    const button = document.getElementById(&quot;load&quot;);
+    const list = document.getElementById(&quot;list&quot;);
+
+    async function loadPosts() {
+      // Step별 코드 작성
+    }
+
+    button.addEventListener(&quot;click&quot;, loadPosts);
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+          <hr />
+          <h3>Step 1. 서버 응답을 텍스트로 확인</h3>
+          <pre><code class="language-javascript">async function loadPosts() {
+  const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+  const text = await response.text();
+  console.log(text);
+}
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li>콘솔에 긴 문자열이 출력된다</li>
+            <li>객체처럼 보이지만 <strong>문자열(TEXT)</strong> 이다</li>
+            <li>화면은 아직 비어 있어도 정상이다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 텍스트를 JSON → 객체로 변환</h3>
+          <pre><code class="language-javascript">async function loadPosts() {
+  const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+  const text = await response.text();
+  const posts = JSON.parse(text);
+
+  console.log(posts);
+}
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>posts</code>는 배열이다</li>
+            <li><code>posts[0].title</code> 접근 가능</li>
+            <li>JavaScript가 구조를 이해한다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. response.json() 사용</h3>
+          <pre><code class="language-javascript">async function loadPosts() {
+  const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+  const posts = await response.json();
+
+  console.log(posts);
+}
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li>Step 2와 결과가 동일하다</li>
+            <li>실무에서는 이 방식을 기본으로 사용한다</li>
+          </ul>
+          <hr />
+          <h3>Step 4. 서버 데이터를 DOM으로 출력 (핵심)</h3>
+          <pre><code class="language-javascript">async function loadPosts() {
+  const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+  const posts = await response.json();
+
+  list.innerHTML = &quot;&quot;;
+
+  for (let post of posts) {
+    const li = document.createElement(&quot;li&quot;);
+    li.textContent = post.title;
+    list.appendChild(li);
+  }
+}
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li>버튼 클릭 시 <code>&lt;li&gt;</code> 목록이 화면에 나타난다</li>
+            <li><strong>appendChild 실행 순간 화면이 갱신된다</strong></li>
+          </ul>
+          <hr />
+          <h3>Step 5. 확인 실험</h3>
+          <ol>
+            <li><code>list.appendChild(li)</code>를 주석 처리</li>
+            <li>버튼 클릭</li>
+            <li>화면에 아무 것도 나오지 않는지 확인</li>
+            <li>주석 해제 후 다시 실행</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li><strong>데이터 ≠ 화면</strong></li>
+            <li>DOM에 붙이지 않으면 화면에 표시되지 않는다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>서버 응답은 항상 텍스트다</li>
+            <li>JSON은 데이터 전송 규칙이다</li>
+            <li><code>response.json()</code>으로 객체 변환</li>
+            <li>화면 출력은 DOM 조작의 결과다</li>
+            <li><strong>appendChild가 없으면 화면도 없다</strong></li>
+          </ul>
+          <hr />
+          <h3>완성 코드(참고)</h3>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;body&gt;
+
+  &lt;h2&gt;게시글 목록&lt;/h2&gt;
+  &lt;button id=&quot;load&quot;&gt;불러오기&lt;/button&gt;
+  &lt;ul id=&quot;list&quot;&gt;&lt;/ul&gt;
+
+  &lt;script&gt;
+    const button = document.getElementById(&quot;load&quot;);
+    const list = document.getElementById(&quot;list&quot;);
+
+    async function loadPosts() {
+      const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+      const posts = await response.json();
+
+      list.innerHTML = &quot;&quot;;
+
+      for (let post of posts) {
+        const li = document.createElement(&quot;li&quot;);
+        li.textContent = post.title;
+        list.appendChild(li);
+      }
+    }
+
+    button.addEventListener(&quot;click&quot;, loadPosts);
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+          <hr />
+          <h2>3일차 핵심 정리</h2>
+          <ul>
+            <li>
+              <p>브라우저는 HTML을 그대로 화면에 그리지 않고 DOM 객체 트리로 만든다</p>
+            </li>
+            <li>
+              <p>JavaScript는 화면을 직접 그리지 않고, DOM을 통해 간접 제어한다</p>
+            </li>
+            <li>
+              <p>document는 현재 웹페이지 전체를 대표하는 최상위 객체다</p>
+            </li>
+            <li>
+              <p>DOM 조작의 시작은 요소 선택이다(getElementById, querySelector)</p>
+            </li>
+            <li>
+              <p>DOM의 값이나 스타일을 바꾸면 화면은 즉시 변경된다</p>
+            </li>
+            <li>
+              <p>이벤트는 코드 실행의 출발점이다 (이벤트 → 함수 실행 → DOM 변경)</p>
+            </li>
+            <li>
+              <p>서버에서 오는 데이터는 객체가 아니라 텍스트(TEXT) 다</p>
+            </li>
+            <li>
+              <p>JSON은 데이터를 주고받기 위한 텍스트 규칙이다</p>
+            </li>
+            <li>
+              <p>서버 데이터는 DOM으로 옮겨야만 화면에 표시된다</p>
+            </li>
+          </ul>
+
+        </article>
+      </div>
     </main>
   </div>
 
   <script src="js/common.js"></script>
-
 </body>
 
 </html>

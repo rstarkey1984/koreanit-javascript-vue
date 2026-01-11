@@ -4,603 +4,562 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</title>
-  <link rel="stylesheet" href="css/common.css">
+  <title>4일차 — 프론트엔드 도구의 진화와 Vue 맛보기</title>
+  <link rel="stylesheet" href="css/common.css" />
 </head>
 
 <body>
+  <div class="topbar">
+    <button class="btn" data-toggle-sidebar type="button">목차</button>
+    <div style="font-weight:700">4일차 — 프론트엔드 도구의 진화와 Vue 맛보기</div>
+  </div>
+
   <div class="layout">
     <aside class="sidebar" aria-label="강의안 내비게이션">
-      <div class="brand">
-        <div class="kicker">JavaScript 강의안</div>
-        <div class="title">목차</div>
-      </div>
       <nav class="nav">
-        <a class="" href="index.html">강의 개요</a>
-        <a class="" href="1.html">Day 1 — 실행환경과 JavaScript 실행 흐름 이해</a>
-        <a class="" href="2.html">Day 2 — JavaScript 데이터와 이벤트의 기본 구조</a>
-        <a class="" href="3.html">Day 3 — DOM과 이벤트 기반 UI 제어</a>
-        <a class="active" href="4.html">Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
-        <a class="" href="5.html">Day 5 — Vue.js 실습 (CDN 방식)</a>
-        <div class="small">파일 기준: 4.md</div>
+        <a href="index.html">전체개요 — JavaScript 강의안</a>
+        <a href="1.html">1일차 — 실행환경과 JavaScript 실행 흐름 이해</a>
+        <a href="2.html">2일차 — JavaScript 데이터와 이벤트의 기본 구조</a>
+        <a href="3.html">3일차 — DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</a>
+        <a href="4.html">4일차 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
+        <a href="5.html">5일차 — Vue.js 실습 (CDN 방식)</a>
       </nav>
     </aside>
 
     <main class="main">
-      <div class="topbar">
-        <h1 class="page-title">Day 4</h1>
-        <span class="badge">HTML 문서</span>
-      </div>
-
-      <article class="content">
-        <h1>프론트엔드 도구의 진화와 Vue 맛보기</h1>
-
-        <hr />
-
-        <h2>강의 목표</h2>
-
-        <blockquote>
-          <p>오늘은 <strong>왜 프레임워크가 등장했는지</strong>를 이해하는 날이다.</p>
-        </blockquote>
-
-        <ul>
-          <li>DOM 직접 제어 방식의 한계를 설명할 수 있다</li>
-          <li>jQuery, Vue, React의 차이를 <strong>흐름 관점</strong>에서 설명할 수 있다</li>
-          <li>프레임워크가 해결하려는 문제가 무엇인지 이해한다</li>
-          <li>Vue를 통해 <strong>상태 → 화면</strong> 흐름을 직접 체험한다</li>
-        </ul>
-
-        <p>Day 4는 <strong>Vue 문법 수업이 아니라</strong>,<br />
-          "DOM을 직접 만지는 방식에서 벗어나는 전환점" 이다.</p>
-
-        <hr />
-
-        <h2>전체 실습 폴더 구조</h2>
-
-        <div class="codehilite">
-          <pre><span></span><code>day4/
+      <div class="container">
+        <h1 class="page-title">4일차</h1>
+        <article class="content">
+          <h1>프론트엔드 도구의 진화와 Vue 맛보기</h1>
+          <hr />
+          <h2>강의 목표</h2>
+          <blockquote>
+            <p>오늘은 <strong>왜 프레임워크가 등장했는지</strong>를 이해하는 날이다.</p>
+          </blockquote>
+          <ul>
+            <li>DOM 직접 제어 방식의 한계를 설명할 수 있다</li>
+            <li>jQuery, Vue, React의 차이를 <strong>흐름 관점</strong>에서 설명할 수 있다</li>
+            <li>프레임워크가 해결하려는 문제가 무엇인지 이해한다</li>
+            <li>Vue를 통해 <strong>상태 → 화면</strong> 흐름을 직접 체험한다</li>
+          </ul>
+          <p>Day 4는 <strong>Vue 문법 수업이 아니라</strong>,
+            &quot;DOM을 직접 만지는 방식에서 벗어나는 전환점&quot; 이다.</p>
+          <hr />
+          <h2>전체 실습 폴더 구조</h2>
+          <pre><code class="language-text">day4/
  ├─ 2-dom-hard.html
  ├─ 3-jquery-basic.html
  ├─ 4-vue-cdn.html
- └─ 5-vue-state.html
+ ├─ 5-vue-state.html
+ ├─ 6-1-dom-posts.html
+ └─ 6-2-vue-posts.html
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h2>1. DOM 직접 제어의 한계</h2>
-
-        <p>Day 3까지 우리는 JavaScript로 DOM을 직접 제어했다.</p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">title</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="p">;</span>
-<span class="nx">title</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">;</span>
+          <hr />
+          <h2>1. DOM 직접 제어의 한계</h2>
+          <p>Day 3까지 우리는 JavaScript로 DOM을 직접 제어했다.</p>
+          <pre><code class="language-javascript">title.textContent = count;
+title.style.color = &quot;red&quot;;
 </code></pre>
-        </div>
+          <p>이 방식은 <strong>작은 화면</strong>에서는 문제가 없지만,
+            화면이 조금만 복잡해져도 관리 비용이 급격히 증가한다.</p>
+          <h3>DOM 직접 제어의 문제점</h3>
+          <ul>
+            <li>같은 DOM 조작 코드가 여러 곳에서 반복된다</li>
+            <li>데이터(상태) 변경 코드와 화면(DOM) 변경 코드가 섞인다</li>
+            <li>화면 구조가 바뀌면 JavaScript 코드도 함께 수정해야 한다</li>
+          </ul>
+          <p>👉 <strong>DOM을 직접 만지는 방식은 규모가 커질수록 유지보수가 어렵다.</strong></p>
+          <hr />
+          <h2>2. DOM 직접 제어 실습</h2>
+          <h3>실습 목표</h3>
+          <ul>
+            <li>&quot;상태가 바뀌어도 화면은 자동으로 바뀌지 않는다&quot;는 사실을 체험한다</li>
+            <li>상태 로직과 화면 로직이 섞이기 시작하는 지점을 직접 확인한다</li>
+          </ul>
+          <hr />
+          <h3>실습가이드</h3>
+          <p>📄 파일명: <code>2-dom-hard.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;DOM 직접 제어 실습&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <p>이 방식은 <strong>작은 화면</strong>에서는 문제가 없지만,<br />
-          화면이 조금만 복잡해져도 관리 비용이 급격히 증가한다.</p>
+  &lt;p id=&quot;count&quot;&gt;0&lt;/p&gt;
+  &lt;button id=&quot;btn&quot;&gt;증가&lt;/button&gt;
 
-        <h3>DOM 직접 제어의 문제점</h3>
+  &lt;script&gt;
+    let count = 0;
 
-        <ul>
-          <li>같은 DOM 조작 코드가 여러 곳에서 반복된다</li>
-          <li>데이터(상태) 변경 코드와 화면(DOM) 변경 코드가 섞인다</li>
-          <li>화면 구조가 바뀌면 JavaScript 코드도 함께 수정해야 한다</li>
-        </ul>
+    const countEl = document.getElementById(&quot;count&quot;);
+    const button = document.getElementById(&quot;btn&quot;);
 
-        <p>👉 <strong>DOM을 직접 만지는 방식은 규모가 커질수록 유지보수가 어렵다.</strong></p>
+    button.addEventListener(&quot;click&quot;, handleClick);
 
-        <hr />
+    function handleClick() {
+      // Step 코드가 이 함수 안에 추가된다
+    }
+  &lt;/script&gt;
 
-        <h2>2. DOM 직접 제어 실습</h2>
-
-        <h3>실습 목표</h3>
-
-        <ul>
-          <li>"상태가 바뀌어도 화면은 자동으로 바뀌지 않는다"는 사실을 체험한다</li>
-          <li>상태 로직과 화면 로직이 섞이기 시작하는 지점을 직접 확인한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습가이드</h3>
-
-        <p>📄 파일명: <code>2-dom-hard.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>DOM 직접 제어 실습<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;btn&quot;</span><span class="p">&gt;</span>증가<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
-
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">countEl</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;count&quot;</span><span class="p">);</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="nx">button</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;btn&quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="nx">button</span><span class="p">.</span><span class="nx">addEventListener</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">handleClick</span><span class="p">);</span>
-
-<span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="nx">handleClick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="c1">// Step 코드가 이 함수 안에 추가된다</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
-
-        <h4>사전 체크</h4>
-
-        <ul>
-          <li>버튼 클릭 시 <code>handleClick</code> 함수가 실행되는지만 확인한다</li>
-          <li>아직 화면 변화는 없다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 1. 상태 값 증가 처리</h3>
-
-        <p><code>handleClick</code> 함수 안에 아래 코드를 추가한다.</p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+          <h4>사전 체크</h4>
+          <ul>
+            <li>버튼 클릭 시 <code>handleClick</code> 함수가 실행되는지 확인한다</li>
+            <li>아직 화면 숫자는 바뀌지 않는다</li>
+          </ul>
+          <hr />
+          <h3>Step 1. 상태 값 증가 처리</h3>
+          <pre><code class="language-javascript">count = count + 1;
 </code></pre>
-        </div>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>클릭할 때마다 <code>count</code> 값은 증가한다</li>
-          <li><strong>화면 숫자는 여전히 0이다</strong></li>
-          <li>상태와 화면은 자동으로 연결되지 않는다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 숫자 화면 반영</h3>
-
-        <p>아래 코드를 <code>handleClick</code> 함수 안에 추가한다.</p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">countEl</span><span class="p">.</span><span class="nx">textContent</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="p">;</span>
+          <p>체크 포인트</p>
+          <ul>
+            <li>클릭할 때마다 <code>count</code> 값은 증가한다</li>
+            <li><strong>화면 숫자는 여전히 0이다</strong></li>
+            <li>상태와 화면은 자동으로 연결되지 않는다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 숫자 화면 반영</h3>
+          <pre><code class="language-javascript">countEl.textContent = count;
 </code></pre>
-        </div>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>상태 변경 결과를 <strong>직접 DOM에 반영</strong>해야 한다</li>
-          <li>화면 갱신 책임이 개발자에게 있다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 화면 스타일 변경</h3>
-
-        <p>아래 코드를 <code>handleClick</code> 함수 안에 추가한다.</p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">count</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">countEl</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">;</span>
-<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">countEl</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">;</span>
-<span class="p">}</span>
+          <p>체크 포인트</p>
+          <ul>
+            <li>상태 변경 결과를 <strong>직접 DOM에 반영</strong>해야 한다</li>
+            <li>화면 갱신 책임이 개발자에게 있다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 화면 스타일 변경</h3>
+          <pre><code class="language-javascript">if (count % 2 === 0) {
+  countEl.style.color = &quot;red&quot;;
+} else {
+  countEl.style.color = &quot;blue&quot;;
+}
 </code></pre>
-        </div>
+          <p>체크 포인트</p>
+          <ul>
+            <li>상태 값에 따라 화면 스타일을 직접 제어한다</li>
+            <li>상태 로직 + 화면 로직이 한 함수에 섞이기 시작한다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>데이터가 바뀌어도 화면은 자동으로 바뀌지 않는다</li>
+            <li>화면 변경을 위해 항상 DOM을 직접 조작해야 한다</li>
+            <li>로직이 커질수록 코드가 빠르게 복잡해진다</li>
+          </ul>
+          <p>👉 <strong>이 구조가 프레임워크 등장 배경이다</strong></p>
+          <hr />
+          <h2>3. 도구의 진화</h2>
+          <h3>3-1. jQuery</h3>
+          <blockquote>
+            <p>jQuery는 <strong>DOM 조작을 쉽게 만든 도구</strong>다.</p>
+          </blockquote>
+          <ul>
+            <li>DOM 선택과 조작을 간결한 문법으로 제공</li>
+            <li>코드량은 줄어들지만 <strong>DOM 직접 제어 구조는 그대로 유지</strong>된다</li>
+          </ul>
+          <hr />
+          <h3>jQuery 실습</h3>
+          <p>📄 파일명: <code>3-jquery-basic.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;jQuery 기본 실습&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <p>체크 포인트</p>
+  &lt;p id=&quot;count&quot;&gt;0&lt;/p&gt;
+  &lt;button id=&quot;btn&quot;&gt;증가&lt;/button&gt;
 
-        <ul>
-          <li>상태 값에 따라 화면 스타일을 직접 제어한다</li>
-          <li>상태 로직 + 화면 로직이 한 함수에 섞이기 시작한다</li>
-        </ul>
+  &lt;script src=&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    let count = 0;
 
-        <hr />
+    $(&quot;#btn&quot;).on(&quot;click&quot;, handleClick);
 
-        <h3>실습 정리</h3>
+    function handleClick() {
+      count = count + 1;
+      $(&quot;#count&quot;).text(count);
 
-        <ul>
-          <li>데이터가 바뀌어도 화면은 자동으로 바뀌지 않는다</li>
-          <li>화면 변경을 위해 항상 DOM을 직접 조작해야 한다</li>
-          <li>로직이 커질수록 코드가 빠르게 복잡해진다</li>
-        </ul>
+      if (count % 2 === 0) {
+        $(&quot;#count&quot;).css(&quot;color&quot;, &quot;red&quot;);
+      } else {
+        $(&quot;#count&quot;).css(&quot;color&quot;, &quot;blue&quot;);
+      }
+    }
+  &lt;/script&gt;
 
-        <p>👉 <strong>이 구조가 프레임워크 등장 배경이다</strong></p>
-
-        <hr />
-
-        <h2>3. 도구의 진화</h2>
-
-        <h3>3-1. jQuery</h3>
-
-        <blockquote>
-          <p>jQuery는 <strong>DOM 조작을 쉽게 만든 도구</strong>다.</p>
-        </blockquote>
-
-        <ul>
-          <li>DOM 선택과 조작을 간결한 문법으로 제공</li>
-          <li>코드량 감소</li>
-          <li>하지만 <strong>DOM 직접 제어 구조는 그대로 유지</strong>된다</li>
-        </ul>
-
-        <hr />
-
-        <h3>jQuery 실습</h3>
-
-        <p>📄 파일명: <code>3-jquery-basic.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>jQuery 기본 실습<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">p</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;count&quot;</span><span class="p">&gt;</span>0<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">button</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;btn&quot;</span><span class="p">&gt;</span>증가<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://code.jquery.com/jquery-3.7.1.min.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0</span><span class="p">;</span>
-
-<span class="w">    </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#btn&quot;</span><span class="p">).</span><span class="nx">on</span><span class="p">(</span><span class="s2">&quot;click&quot;</span><span class="p">,</span><span class="w"> </span><span class="nx">handleClick</span><span class="p">);</span>
-
-<span class="w">    </span><span class="kd">function</span><span class="w"> </span><span class="nx">handleClick</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">      </span><span class="c1">// Step 코드 추가</span>
-<span class="w">    </span><span class="p">}</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <p>체크 포인트</p>
+          <ul>
+            <li>문법은 편해졌지만 구조는 동일하다</li>
+            <li>상태 변경 → DOM 직접 수정 흐름은 변하지 않는다</li>
+          </ul>
+          <hr />
+          <h3>3-2. Vue / React</h3>
+          <blockquote>
+            <p>Vue와 React는 <strong>DOM을 직접 만지지 않는다.</strong></p>
+          </blockquote>
+          <ul>
+            <li>화면 기준은 DOM이 아니라 상태(State)</li>
+            <li>상태가 바뀌면 화면은 자동으로 갱신된다</li>
+            <li>DOM 관리는 프레임워크가 담당한다</li>
+          </ul>
+          <table>
+            <thead>
+              <tr>
+                <th>구분</th>
+                <th>흐름</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>jQuery</td>
+                <td>DOM → 화면</td>
+              </tr>
+              <tr>
+                <td>Vue / React</td>
+                <td>상태 → 화면</td>
+              </tr>
+            </tbody>
+          </table>
+          <hr />
+          <h2>4. Vue3 Composition API 맛보기 (CDN 방식)</h2>
+          <h3>실습 목표</h3>
+          <ul>
+            <li>Vue가 <strong>DOM을 직접 제어하지 않는 방식</strong>을 체감한다</li>
+            <li>&quot;상태만 바꿨는데 화면이 바뀐다&quot;는 경험을 한다</li>
+            <li>DOM 조작 코드가 사라지는 구조를 확인한다</li>
+          </ul>
+          <hr />
+          <h3>실습가이드</h3>
+          <p>📄 파일명: <code>4-vue-cdn.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Vue CDN 실습 (Composition API)&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <h4>Step 1. 상태 증가</h4>
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;p&gt;{{ count }}&lt;/p&gt;
+    &lt;button @click=&quot;increase&quot;&gt;증가&lt;/button&gt;
+  &lt;/div&gt;
 
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">count</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">count</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mf">1</span><span class="p">;</span>
+  &lt;script src=&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const { createApp, ref } = Vue;
+
+    createApp({
+      setup() {
+        const count = ref(0);
+
+        const increase = () =&gt; {
+          count.value++;
+        };
+
+        return { count, increase };
+      }
+    }).mount(&quot;#app&quot;);
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. Vue가 관리할 화면 영역 이해</h3>
+          <ul>
+            <li><code>&lt;div id=&quot;app&quot;&gt;</code> 영역을 Vue가 전담 관리한다</li>
+            <li>이 영역 안에서는 <strong>DOM을 직접 건드리지 않는다</strong></li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>document.getElementById</code>가 없다</li>
+            <li><code>addEventListener</code>가 없다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 상태(State) 정의</h3>
+          <ul>
+            <li><code>setup()</code> 함수 안에서 <code>ref()</code>로 상태를 만든다</li>
+            <li><code>count</code>는 Vue가 추적하는 반응형 상태다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>실제 값은 <code>count.value</code>에 들어 있다</li>
+            <li>이 값이 화면의 기준이 된다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 화면과 상태 연결</h3>
+          <ul>
+            <li><code>{{ count }}</code>는 상태를 화면에 출력한다</li>
+            <li>DOM 조회 코드 없이 값이 표시된다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>출력 대상 DOM을 직접 선택하지 않는다</li>
+            <li>화면 위치는 템플릿이 결정한다</li>
+          </ul>
+          <hr />
+          <h3>Step 4. 이벤트와 상태만 연결</h3>
+          <ul>
+            <li>버튼 클릭 시 <code>increase()</code> 함수 실행</li>
+            <li>함수 안에서는 상태만 변경한다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>DOM 변경 코드가 없다</li>
+            <li>상태 변경만으로 화면이 자동 갱신된다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>Vue에서는 DOM을 직접 조작하지 않는다</li>
+            <li>상태(State)가 화면의 유일한 기준이다</li>
+            <li>화면 갱신 책임을 프레임워크가 대신 가진다</li>
+          </ul>
+          <hr />
+          <h2>5. Vue 상태 → 화면 흐름 체험</h2>
+          <h3>실습 목표</h3>
+          <ul>
+            <li>입력값, 이벤트, 화면 갱신이 자동으로 연결되는 구조를 체험한다</li>
+            <li>상태 하나가 여러 화면에 동시에 반영되는 것을 확인한다</li>
+          </ul>
+          <hr />
+          <h3>실습가이드</h3>
+          <p>📄 파일명: <code>5-vue-state.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Vue 상태 실습 (Composition API)&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <h4>Step 2. 화면 반영</h4>
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;input v-model=&quot;message&quot; /&gt;
+    &lt;p&gt;{{ message }}&lt;/p&gt;
+    &lt;p&gt;글자 수: {{ messageLength }}&lt;/p&gt;
+  &lt;/div&gt;
 
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#count&quot;</span><span class="p">).</span><span class="nx">text</span><span class="p">(</span><span class="nx">count</span><span class="p">);</span>
+  &lt;script src=&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const { createApp, ref, computed } = Vue;
+
+    createApp({
+      setup() {
+        const message = ref(&quot;&quot;);
+
+        const messageLength = computed(() =&gt; {
+          return message.value.length;
+        });
+
+        return { message, messageLength };
+      }
+    }).mount(&quot;#app&quot;);
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>Step 1. 입력과 상태 연결</h3>
+          <ul>
+            <li><code>&lt;input&gt;</code>에 <code>v-model</code>을 사용한다</li>
+            <li>입력값이 자동으로 상태에 저장된다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>키보드 이벤트 코드를 작성하지 않는다</li>
+            <li>입력과 상태 연결을 Vue가 처리한다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 상태 출력</h3>
+          <ul>
+            <li>같은 상태를 여러 곳에서 사용한다</li>
+            <li>DOM 접근 코드가 없다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 상태 기반 계산 값 (computed)</h3>
+          <ul>
+            <li><code>computed()</code>는 상태를 기반으로 한 계산 결과다</li>
+            <li>상태가 바뀌면 자동으로 다시 계산된다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>계산을 이벤트로 처리하지 않는다</li>
+            <li>계산 결과도 상태처럼 다룬다</li>
+          </ul>
+          <hr />
+          <h3>실습 정리</h3>
+          <ul>
+            <li>입력, 이벤트, 화면 갱신을 직접 연결하지 않는다</li>
+            <li>상태 하나가 여러 UI를 동시에 결정한다</li>
+          </ul>
+          <hr />
+          <h2>6. 서버 데이터 → 화면 출력 (DOM 직접 제어 vs Vue)</h2>
+          <p>Day 3에서 했던 “서버 데이터(posts) 받아서 <code>&lt;ul&gt;&lt;li&gt;</code>로 출력”을
+            Day 4 관점에서 <strong>두 방식의 구조 차이</strong>로 비교한다.</p>
+          <p>핵심 메시지</p>
+          <ul>
+            <li><strong>DOM 직접 제어 방식</strong>: 개발자가 <em>데이터 → 화면</em>을 직접 연결한다 (DOM 생성/초기화/추가까지 모두 작성)</li>
+            <li><strong>Vue 방식</strong>: 개발자는 <em>상태(posts)</em> 만 바꾸고, 화면 갱신은 Vue가 담당한다</li>
+          </ul>
+          <hr />
+          <h3>6-1. DOM 직접 제어 방식 (완성 코드)</h3>
+          <p>📄 파일명: <code>6-1-dom-posts.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;DOM - 서버 데이터 출력&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <h4>Step 3. 스타일 변경</h4>
+  &lt;h2&gt;게시글 목록 (DOM 직접 제어)&lt;/h2&gt;
 
-        <div class="codehilite">
-          <pre><span></span><code><span class="k">if</span><span class="w"> </span><span class="p">(</span><span class="nx">count</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mf">2</span><span class="w"> </span><span class="o">===</span><span class="w"> </span><span class="mf">0</span><span class="p">)</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#count&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;red&quot;</span><span class="p">);</span>
-<span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span>
-<span class="w">  </span><span class="nx">$</span><span class="p">(</span><span class="s2">&quot;#count&quot;</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s2">&quot;color&quot;</span><span class="p">,</span><span class="w"> </span><span class="s2">&quot;blue&quot;</span><span class="p">);</span>
-<span class="p">}</span>
+  &lt;button id=&quot;btn&quot;&gt;불러오기&lt;/button&gt;
+
+  &lt;ul id=&quot;list&quot;&gt;&lt;/ul&gt;
+
+  &lt;script&gt;
+    const button = document.getElementById(&quot;btn&quot;);
+    const list = document.getElementById(&quot;list&quot;);
+
+    button.addEventListener(&quot;click&quot;, loadPosts);
+
+    async function loadPosts() {
+      const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+      const posts = await response.json();
+
+      // 1) 기존 목록 비우기
+      list.innerHTML = &quot;&quot;;
+
+      // 2) &lt;li&gt; 생성해서 붙이기
+      posts.forEach((post) =&gt; {
+        const li = document.createElement(&quot;li&quot;);
+        li.textContent = post.title;
+        list.appendChild(li);
+      });
+    }
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <p>설명</p>
+          <ul>
+            <li>
+              <p><code>fetch</code>로 데이터를 받아도 화면은 자동으로 바뀌지 않는다</p>
+            </li>
+            <li>
+              <p>개발자가 직접</p>
+              <ul>
+                <li>목록 비우기 (<code>innerHTML = &quot;&quot;</code>)</li>
+                <li><code>&lt;li&gt;</code> 만들기 (<code>createElement</code>)</li>
+                <li>붙이기 (<code>appendChild</code>)</li>
+              </ul>
+              <p>를 매번 작성해야 한다</p>
+            </li>
+            <li>
+              <p>화면이 커질수록 DOM 조작 코드가 빠르게 늘어난다</p>
+            </li>
+          </ul>
+          <hr />
+          <h3>6-2. Vue 방식 (Composition API, 완성 코드)</h3>
+          <p>📄 파일명: <code>6-2-vue-posts.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Vue - 서버 데이터 출력 (Composition API)&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <p>체크 포인트</p>
+  &lt;div id=&quot;app&quot;&gt;
+    &lt;h2&gt;게시글 목록 (Vue)&lt;/h2&gt;
 
-        <ul>
-          <li>문법은 편해졌지만 구조는 동일하다</li>
-          <li>상태 변경 → DOM 직접 수정 흐름은 변하지 않는다</li>
-        </ul>
+    &lt;button @click=&quot;loadPosts&quot;&gt;불러오기&lt;/button&gt;
 
-        <hr />
+    &lt;ul&gt;
+      &lt;li v-for=&quot;post in posts&quot; :key=&quot;post.id&quot;&gt;
+        {{ post.title }}
+      &lt;/li&gt;
+    &lt;/ul&gt;
+  &lt;/div&gt;
 
-        <h3>3-2. Vue / React</h3>
+  &lt;script src=&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;&gt;&lt;/script&gt;
+  &lt;script&gt;
+    const { createApp, ref } = Vue;
 
-        <blockquote>
-          <p>Vue와 React는 <strong>DOM을 직접 만지지 않는다.</strong></p>
-        </blockquote>
+    createApp({
+      setup() {
+        const posts = ref([]);
 
-        <ul>
-          <li>화면 기준은 DOM이 아니라 상태(State)</li>
-          <li>상태가 바뀌면 화면은 자동으로 갱신된다</li>
-          <li>DOM 관리는 프레임워크가 담당한다</li>
-        </ul>
+        const loadPosts = async () =&gt; {
+          const response = await fetch(&quot;https://jsonplaceholder.typicode.com/posts&quot;);
+          posts.value = await response.json();
+        };
 
-        <table>
-          <thead>
-            <tr>
-              <th>구분</th>
-              <th>흐름</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>jQuery</td>
-              <td>DOM → 화면</td>
-            </tr>
-            <tr>
-              <td>Vue / React</td>
-              <td>상태 → 화면</td>
-            </tr>
-          </tbody>
-        </table>
+        return { posts, loadPosts };
+      }
+    }).mount(&quot;#app&quot;);
+  &lt;/script&gt;
 
-        <hr />
-
-        <h2>4. Vue 맛보기 (CDN 방식)</h2>
-
-        <h3>실습 목표</h3>
-
-        <ul>
-          <li>Vue가 <strong>DOM을 직접 제어하지 않는 방식</strong>을 체감한다</li>
-          <li>"상태만 바꿨는데 화면이 바뀐다"는 경험을 한다</li>
-          <li>DOM 조작 코드가 사라지는 구조를 확인한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습가이드</h3>
-
-        <p>📄 파일명: <code>4-vue-cdn.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Vue CDN 실습<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;app&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ count }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">button</span> <span class="err">@</span><span class="na">click</span><span class="o">=</span><span class="s">&quot;increase&quot;</span><span class="p">&gt;</span>증가<span class="p">&lt;/</span><span class="nt">button</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createApp</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Vue</span><span class="p">;</span>
-
-<span class="w">    </span><span class="nx">createApp</span><span class="p">({</span>
-<span class="w">      </span><span class="nx">data</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="nx">count</span><span class="o">:</span><span class="w"> </span><span class="mf">0</span>
-<span class="w">        </span><span class="p">};</span>
-<span class="w">      </span><span class="p">},</span>
-<span class="w">      </span><span class="nx">methods</span><span class="o">:</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="nx">increase</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="k">this</span><span class="p">.</span><span class="nx">count</span><span class="o">++</span><span class="p">;</span>
-<span class="w">        </span><span class="p">}</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <p>설명</p>
+          <ul>
+            <li>화면에 필요한 구조(<code>&lt;ul&gt;&lt;li&gt;...</code>)를 <strong>템플릿에서 선언</strong>한다 (<code>v-for</code>)</li>
+            <li>개발자는 DOM을 만들지 않고, <strong>상태(posts)만 변경</strong>한다</li>
+            <li><code>posts.value = ...</code> 한 줄로 상태가 바뀌면, Vue가 화면을 자동으로 다시 그린다</li>
+          </ul>
+          <hr />
+          <h3>6-3. 이 장의 결론</h3>
+          <ul>
+            <li>DOM 직접 제어는 “화면을 어떻게 만들지”가 코드의 중심이 된다</li>
+            <li>Vue는 “데이터(상태)가 무엇인지”가 코드의 중심이 된다</li>
+          </ul>
+          <p>그래서 프레임워크는
+            DOM 조작을 더 잘하려고 나온 게 아니라,
+            <strong>DOM 조작을 신경 쓰지 않게 만들려고 나온 것</strong>이다
+          </p>
+          <hr />
+          <h2>4일차 핵심 정리</h2>
+          <ul>
+            <li>
+              <p>DOM을 직접 제어할수록 코드와 화면의 연결이 복잡해진다</p>
+            </li>
+            <li>
+              <p>화면이 커질수록 DOM 관리 비용이 급격히 증가한다</p>
+            </li>
+            <li>
+              <p>프레임워크는 DOM 변경을 대신 처리해준다</p>
+            </li>
+            <li>
+              <p>개발자는 DOM이 아니라 상태(State)를 기준으로 생각한다</p>
+            </li>
+            <li>
+              <p>Vue에서 화면은 상태의 결과다</p>
+            </li>
+            <li>
+              <p>개발자는 어떻게 바꿀지가 아니라 무엇을 보여줄지에 집중한다</p>
+            </li>
+          </ul>
 
-        <hr />
-
-        <h3>Step 1. Vue가 관리할 화면 영역 이해</h3>
-
-        <ul>
-          <li><code>&lt;div id="app"&gt;</code> 영역을 Vue가 전담 관리한다</li>
-          <li>이 영역 안에서는 <strong>DOM을 직접 건드리지 않는다</strong></li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li><code>document.getElementById</code>가 없다</li>
-          <li><code>addEventListener</code>가 없다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 상태(State) 정의</h3>
-
-        <ul>
-          <li><code>data()</code> 함수에서 <code>count</code> 상태를 정의한다</li>
-          <li>이 값이 화면의 기준이 된다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>화면의 숫자는 DOM이 아니라 <code>count</code> 값에서 나온다</li>
-          <li>상태는 JavaScript 객체일 뿐이다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 화면과 상태 연결</h3>
-
-        <ul>
-          <li><code>{{ count }}</code>는 상태를 화면에 출력한다</li>
-          <li>DOM 조회 코드 없이 값이 표시된다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>출력 대상 DOM을 직접 선택하지 않는다</li>
-          <li>"이 값이 어디에 표시되는지"를 Vue가 알고 있다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 4. 이벤트와 상태만 연결</h3>
-
-        <ul>
-          <li>버튼 클릭 시 <code>increase()</code> 메서드 실행</li>
-          <li>메서드 안에서는 <code>this.count++</code>만 수행</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>화면을 바꾸는 코드가 없다</li>
-          <li>상태만 바꿨는데 화면이 자동으로 바뀐다</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습 정리</h3>
-
-        <ul>
-          <li>Vue에서는 DOM을 직접 조작하지 않는다</li>
-          <li>상태(State)가 화면의 유일한 기준이다</li>
-          <li>화면 갱신 책임을 프레임워크가 대신 가진다</li>
-        </ul>
-
-        <hr />
-
-        <h2>5. 상태 → 화면 흐름 체험</h2>
-
-        <h3>실습 목표</h3>
-
-        <ul>
-          <li>입력값, 이벤트, 화면 갱신이 <strong>자동으로 연결되는 구조</strong>를 체험한다</li>
-          <li>상태 하나가 여러 화면에 동시에 반영되는 것을 확인한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습가이드</h3>
-
-        <p>📄 파일명: <code>5-vue-state.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Vue 상태 실습<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">div</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;app&quot;</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">input</span> <span class="na">v-model</span><span class="o">=</span><span class="s">&quot;message&quot;</span> <span class="p">/&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>{{ message }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-    <span class="p">&lt;</span><span class="nt">p</span><span class="p">&gt;</span>글자 수: {{ message.length }}<span class="p">&lt;/</span><span class="nt">p</span><span class="p">&gt;</span>
-  <span class="p">&lt;/</span><span class="nt">div</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span> <span class="na">src</span><span class="o">=</span><span class="s">&quot;https://unpkg.com/vue@3/dist/vue.global.js&quot;</span><span class="p">&gt;&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="kd">const</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="nx">createApp</span><span class="w"> </span><span class="p">}</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="nx">Vue</span><span class="p">;</span>
-
-<span class="w">    </span><span class="nx">createApp</span><span class="p">({</span>
-<span class="w">      </span><span class="nx">data</span><span class="p">()</span><span class="w"> </span><span class="p">{</span>
-<span class="w">        </span><span class="k">return</span><span class="w"> </span><span class="p">{</span>
-<span class="w">          </span><span class="nx">message</span><span class="o">:</span><span class="w"> </span><span class="s2">&quot;&quot;</span>
-<span class="w">        </span><span class="p">};</span>
-<span class="w">      </span><span class="p">}</span>
-<span class="w">    </span><span class="p">}).</span><span class="nx">mount</span><span class="p">(</span><span class="s1">&#39;#app&#39;</span><span class="p">);</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
-</code></pre>
-        </div>
-
-        <hr />
-
-        <h3>Step 1. 입력과 상태 연결</h3>
-
-        <ul>
-          <li><code>&lt;input&gt;</code> 요소에 <code>v-model</code>을 사용한다</li>
-          <li>입력값이 자동으로 <code>message</code> 상태에 저장된다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>키보드 이벤트 코드를 작성하지 않는다</li>
-          <li>입력과 상태 연결을 Vue가 처리한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 상태 출력</h3>
-
-        <ul>
-          <li><code>{{ message }}</code>로 상태를 그대로 출력한다</li>
-          <li>동일한 상태를 여러 곳에서 사용한다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>DOM 접근 코드가 전혀 없다</li>
-          <li>같은 상태가 여러 화면에 동시에 반영된다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 상태 기반 계산 출력</h3>
-
-        <ul>
-          <li><code>message.length</code>를 화면에 출력한다</li>
-          <li>별도의 계산 이벤트가 없다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>상태가 바뀔 때마다 자동으로 다시 계산된다</li>
-          <li>화면 갱신 로직이 없다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 4. 동작 관찰</h3>
-
-        <ul>
-          <li>입력창에 글자를 입력하며 화면 변화를 확인한다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>이벤트 리스너 없음</li>
-          <li>DOM 조회 없음</li>
-          <li>상태 → 화면 흐름이 자동으로 유지된다</li>
-        </ul>
-
-        <hr />
-
-        <h3>실습 정리</h3>
-
-        <ul>
-          <li>입력, 이벤트, 화면 갱신을 직접 연결하지 않는다</li>
-          <li>상태 하나가 여러 UI를 동시에 결정한다</li>
-          <li>UI 로직이 단순해지고 예측 가능해진다</li>
-        </ul>
-
-        <hr />
-
-        <h2>Day 4 정리</h2>
-
-        <ul>
-          <li>DOM 직접 제어는 규모가 커질수록 한계가 명확해진다</li>
-          <li>프레임워크는 편의가 아니라 <strong>구조적 해결책</strong>이다</li>
-          <li>Vue는 상태 중심 사고방식을 제공한다</li>
-        </ul>
-
-        <div class="footer">© 2026 한국IT교육원. All rights reserved.</div>
-      </article>
+        </article>
+      </div>
     </main>
   </div>
 
   <script src="js/common.js"></script>
-
 </body>
 
 </html>

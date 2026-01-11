@@ -4,553 +4,420 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Day 1 — 실행환경과 JavaScript 실행 흐름 이해</title>
-  <link rel="stylesheet" href="css/common.css">
+  <title>1일차 — 실행환경과 JavaScript 실행 흐름 이해</title>
+  <link rel="stylesheet" href="css/common.css" />
 </head>
 
 <body>
+  <div class="topbar">
+    <button class="btn" data-toggle-sidebar type="button">목차</button>
+    <div style="font-weight:700">1일차 — 실행환경과 JavaScript 실행 흐름 이해</div>
+  </div>
+
   <div class="layout">
     <aside class="sidebar" aria-label="강의안 내비게이션">
-      <div class="brand">
-        <div class="kicker">JavaScript 강의안</div>
-        <div class="title">목차</div>
-      </div>
       <nav class="nav">
-        <a class="" href="index.html">강의 개요</a>
-        <a class="active" href="1.html">Day 1 — 실행환경과 JavaScript 실행 흐름 이해</a>
-        <a class="" href="2.html">Day 2 — JavaScript 데이터와 이벤트의 기본 구조</a>
-        <a class="" href="3.html">Day 3 — DOM과 이벤트 기반 UI 제어</a>
-        <a class="" href="4.html">Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
-        <a class="" href="5.html">Day 5 — Vue.js 실습 (CDN 방식)</a>
-        <div class="small">파일 기준: 1.md</div>
+        <a href="index.html">전체개요 — JavaScript 강의안</a>
+        <a href="1.html">1일차 — 실행환경과 JavaScript 실행 흐름 이해</a>
+        <a href="2.html">2일차 — JavaScript 데이터와 이벤트의 기본 구조</a>
+        <a href="3.html">3일차 — DOM과 이벤트 기반 UI 제어 및 서버와 데이터 통신</a>
+        <a href="4.html">4일차 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
+        <a href="5.html">5일차 — Vue.js 실습 (CDN 방식)</a>
       </nav>
     </aside>
 
     <main class="main">
-      <div class="topbar">
-        <h1 class="page-title">Day 1</h1>
-        <span class="badge">HTML 문서</span>
-      </div>
-
-      <article class="content">
-        <h1>실행환경과 JavaScript 실행 흐름 이해</h1>
-
-        <hr />
-
-        <h2>강의 목표</h2>
-
-        <blockquote>
-          <p>오늘은 JavaScript가 <strong>어디에서, 어떤 순서로 실행되는지</strong>를 이해한다.</p>
-        </blockquote>
-
-        <ul>
-          <li>JavaScript 실행 환경을 설명할 수 있다</li>
-          <li>브라우저가 HTML을 처리하는 흐름을 이해한다</li>
-          <li><code>&lt;script&gt;</code> 위치에 따른 실행 시점을 설명할 수 있다</li>
-          <li>JavaScript가 DOM을 다루는 언어임을 이해한다</li>
-        </ul>
-
-        <p><strong>JavaScript 문법을 배우기 전에 반드시 짚고 가야 하는 기초 개념</strong>을 다룬다.</p>
-
-        <hr />
-
-        <h2>전체 실습 폴더 구조</h2>
-
-        <div class="codehilite">
-          <pre><span></span><code>day1/
+      <div class="container">
+        <h1 class="page-title">1일차</h1>
+        <article class="content">
+          <h1>실행환경과 JavaScript 실행 흐름 이해</h1>
+          <hr />
+          <h2>강의 목표</h2>
+          <blockquote>
+            <p>오늘은 JavaScript가 <strong>어디에서, 어떤 순서로 실행되는지</strong>를 이해한다.</p>
+          </blockquote>
+          <ul>
+            <li>JavaScript 실행 환경을 설명할 수 있다</li>
+            <li>브라우저가 HTML을 처리하는 흐름을 이해한다</li>
+            <li><code>&lt;script&gt;</code> 위치에 따른 실행 시점을 설명할 수 있다</li>
+            <li>JavaScript가 DOM을 다루는 언어임을 이해한다</li>
+          </ul>
+          <p><strong>JavaScript 문법을 배우기 전에 반드시 짚고 가야 하는 기초 개념</strong>을 다룬다.</p>
+          <hr />
+          <h2>전체 실습 폴더 구조</h2>
+          <pre><code class="language-text">day1/
  ├─ 4-runtime.html
  ├─ 5-dom-manipulation.html
  └─ 6-script-order.html
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h2>1. JavaScript는 어디에서 실행되는가</h2>
-
-        <blockquote>
-          <p>JavaScript는 브라우저나 Node.js 같은<br />
-            <strong>JavaScript 실행 환경(JavaScript Runtime)</strong> 위에서 실행된다.
-          </p>
-        </blockquote>
-
-        <p>JavaScript는 단독으로 동작하지 않으며, 항상 실행 환경이 제공하는 기능 위에서 실행된다.</p>
-
-        <hr />
-
-        <h2>2. 브라우저 관점에서 본 HTML · CSS · JavaScript의 역할</h2>
-
-        <p><img src="img/webpage_browser.png" alt="이미지" /></p>
-
-        <ul>
-          <li>
-            <p>HTML 문서: 집의 설계도<br />
-              (브라우저가 이 설계도를 읽고, 어떤 방이 있고 문이 어디 있는지 구조를 파악해서 집(DOM)을 만든다)</p>
-          </li>
-          <li>
-            <p>CSS: 집을 꾸미는 인테리어 규칙<br />
-              (브라우저가 인테리어 규칙을 적용해, 벽 색깔, 크기, 위치, 배치 등을 정해 집을 어떻게 보이게 할지 결정한다)</p>
-          </li>
-          <li>
-            <p>JavaScript: 집을 제어하는 자동 제어 시스템<br />
-              (브라우저가 JavaScript 엔진으로 명령을 실행해, 문을 열고 닫거나 방을 없애고 새로 만드는 등 집의 구조와 상태를 실행 중에 바꾼다)</p>
-          </li>
-        </ul>
-
-        <blockquote>
-          <p><strong>HTML은 DOM을 만들기 위한 설계도이고<br />
-              CSS는 스타일 규칙,<br />
-              JavaScript는 실행 중 DOM을 제어하는 도구다. </strong> </p>
-        </blockquote>
-
-        <hr />
-
-        <h2>3. 브라우저 동작 원리</h2>
-
-        <blockquote>
-          <p>브라우저는 HTML·CSS·JavaScript를 처리하고<br />
-            그 결과를 화면에 표시하는 실행 환경이다.<br />
-            HTML 코드가 화면에 보이기까지 브라우저 내부에서는<br />
-            여러 구성 요소가 역할을 나누어 순차적으로 동작한다.</p>
-        </blockquote>
-
-        <ul>
-          <li>
-            <p><strong>HTML 파서</strong><br />
-              HTML 문서를 위에서 아래로 순서대로 해석하며<br />
-              웹페이지의 구조를 나타내는 DOM(Document Object Model) 을 생성한다.<br />
-              <code>&lt;style&gt;</code> 태그를 만나면 CSS 코드를 CSS 파서에게 전달하고,<br />
-              <code>&lt;script&gt;</code> 태그를 만나면 script 요소를 DOM에 추가한 뒤,<br />
-              그 아래의 HTML 해석을 잠시 보류하고 JavaScript 코드 실행을 JavaScript 엔진에 위임한다.
+          <hr />
+          <h2>1. JavaScript는 어디에서 실행되는가</h2>
+          <blockquote>
+            <p>JavaScript는 브라우저나 Node.js 같은
+              <strong>JavaScript 실행 환경(JavaScript Runtime)</strong> 위에서 실행된다.
             </p>
-          </li>
-          <li>
-            <p><strong>CSS 파서</strong><br />
-              전달받은 CSS 코드를 해석해<br />
-              각 DOM 요소가 화면에 어떻게 보일지를 결정하는<br />
-              스타일 규칙 정보를 생성한다.</p>
-          </li>
-          <li>
-            <p><strong>JavaScript 엔진</strong><br />
-              HTML 파서로부터 실행이 위임된 <code>&lt;script&gt;</code> 안의<br />
-              JavaScript 코드를 위에서부터 차례대로 실행한다.<br />
-              실행 과정에서 DOM 구조나 요소의 스타일 값을 변경할 수 있다.</p>
-          </li>
-          <li>
-            <p><strong>화면 갱신</strong><br />
-              JavaScript 실행이나 스타일 계산 결과로<br />
-              DOM 구조나 스타일 정보가 변경되면,<br />
-              브라우저는 변경된 내용을 반영하기 위해<br />
-              화면을 다시 계산하고 갱신한다.</p>
-          </li>
-        </ul>
+          </blockquote>
+          <p>JavaScript는 단독으로 동작하지 않으며, 항상 실행 환경이 제공하는 기능 위에서 실행된다.</p>
+          <hr />
+          <h2>2. 브라우저 관점에서 본 HTML · CSS · JavaScript의 역할</h2>
+          <p><img src="img/webpage_browser.png" alt="이미지" /></p>
+          <ul>
+            <li>
+              <p>HTML 문서: 집의 설계도<br />
+                (브라우저가 이 설계도를 읽고, 어떤 방이 있고 문이 어디 있는지 구조를 파악해서 집(DOM)을 만든다)</p>
+            </li>
+            <li>
+              <p>CSS: 집을 꾸미는 인테리어 규칙<br />
+                (브라우저가 인테리어 규칙을 적용해, 벽 색깔, 크기, 위치, 배치 등을 정해 집을 어떻게 보이게 할지 결정한다)</p>
+            </li>
+            <li>
+              <p>JavaScript: 집을 제어하는 자동 제어 시스템<br />
+                (브라우저가 JavaScript 엔진으로 명령을 실행해, 문을 열고 닫거나 방을 없애고 새로 만드는 등 집의 구조와 상태를 실행 중에 바꾼다)</p>
+            </li>
+          </ul>
+          <blockquote>
+            <p>HTML은 DOM을 만들기 위한 설계도이고,<br />
+              CSS는 스타일 규칙,<br />
+              JavaScript는 실행 중 DOM을 제어하는 도구다.</p>
+          </blockquote>
+          <hr />
+          <h2>3. 브라우저 동작 원리</h2>
+          <blockquote>
+            <p>브라우저는 HTML·CSS·JavaScript를 처리하고<br />
+              그 결과를 화면에 표시하는 실행 환경이다.<br />
+              HTML 코드가 화면에 보이기까지 브라우저 내부에서는<br />
+              여러 구성 요소가 역할을 나누어 순차적으로 동작한다.</p>
+          </blockquote>
+          <ul>
+            <li>
+              <p><strong>HTML 파서</strong><br />
+                HTML 문서를 위에서 아래로 순서대로 해석하며
+                웹페이지의 구조를 나타내는 DOM(Document Object Model) 을 생성한다.
+                <code>&lt;style&gt;</code> 태그를 만나면 CSS 코드를 CSS 파서에게 전달하고,
+                <code>&lt;script&gt;</code> 태그를 만나면 script 요소를 DOM에 추가한 뒤,
+                그 아래의 HTML 해석을 잠시 보류하고 JavaScript 코드 실행을 JavaScript 엔진에 위임한다.
+              </p>
+            </li>
+            <li>
+              <p><strong>CSS 파서</strong><br />
+                전달받은 CSS 코드를 해석해
+                각 DOM 요소가 화면에 어떻게 보일지를 결정하는
+                스타일 규칙 정보를 생성한다.</p>
+            </li>
+            <li>
+              <p><strong>JavaScript 엔진</strong><br />
+                HTML 파서로부터 실행이 위임된 <code>&lt;script&gt;</code> 안의
+                JavaScript 코드를 위에서부터 차례대로 실행한다.
+                실행 과정에서 DOM 구조나 요소의 스타일 값을 변경할 수 있다.</p>
+            </li>
+            <li>
+              <p><strong>화면 갱신</strong><br />
+                JavaScript 실행이나 스타일 계산 결과로
+                DOM 구조나 스타일 정보가 변경되면,
+                브라우저는 변경된 내용을 반영하기 위해
+                화면을 다시 계산하고 갱신한다.</p>
+            </li>
+          </ul>
+          <hr />
+          <h2>4. 브라우저의 Console 기능</h2>
+          <blockquote>
+            <p>개발자 도구의 Console은 JavaScript <strong>실행 결과</strong>와 <strong>오류</strong>를 확인하는 공간이다.</p>
+          </blockquote>
+          <h2>실습 가이드</h2>
+          <p>📄 파일명: <code>4-runtime.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Day 1 - Runtime&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <hr />
+  &lt;h1&gt;JavaScript 실행 확인&lt;/h1&gt;
 
-        <h2>4. 브라우저의 Console 기능</h2>
+  &lt;script&gt;
+    // Step 1. 실행 확인
+    console.log(&quot;JavaScript 실행 중&quot;);
 
-        <blockquote>
-          <p>개발자 도구의 Console은 JavaScript <strong>실행 결과</strong>와 <strong>오류</strong>를 확인하는 공간이다.</p>
-        </blockquote>
+    // Step 2. 실행 순서 확인
+    //console.log(&quot;1) 시작&quot;);
+    //console.log(&quot;2) 실행 중&quot;);
+    //console.log(&quot;3) 끝&quot;);
 
-        <h2>실습 가이드</h2>
+    // Step 3. 오류 메시지 확인 (아래 한 줄의 주석을 해제하면 오류를 볼 수 있다)
+    // console.log(x); // 아직 만들어지지 않은 값을 사용
+  &lt;/script&gt;
 
-        <p>📄 파일명: <code>4-runtime.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Day 1 - Runtime<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">h1</span><span class="p">&gt;</span>JavaScript 실행 확인<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="c1">// Step 1. 실행 확인</span>
-<span class="w">    </span><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">&quot;JavaScript 실행 중&quot;</span><span class="p">);</span>
-
-<span class="w">    </span><span class="c1">// Step 2. 실행 순서 확인</span>
-<span class="w">    </span><span class="c1">//console.log(&quot;1) 시작&quot;);</span>
-<span class="w">    </span><span class="c1">//console.log(&quot;2) 실행 중&quot;);</span>
-<span class="w">    </span><span class="c1">//console.log(&quot;3) 끝&quot;);</span>
-
-<span class="w">    </span><span class="c1">// Step 3. 오류 메시지 확인 (아래 한 줄의 주석을 해제하면 오류를 볼 수 있다)</span>
-<span class="w">    </span><span class="c1">// console.log(x); // 아직 만들어지지 않은 값을 사용</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
+          <hr />
+          <h3>준비</h3>
+          <ul>
+            <li>브라우저에서 파일을 직접 열어 실행한다</li>
+            <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
+            <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
+          </ul>
+          <hr />
+          <h3>Step 1. JavaScript 실행 여부 확인</h3>
+          <ol>
+            <li>Console에 문자열을 출력한다.</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>페이지를 새로고침할 때마다 Console에 동일한 메시지가 출력된다</li>
+            <li>JavaScript 코드가 실제로 실행되고 있음을 확인한다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 실행 순서 확인</h3>
+          <ol>
+            <li>여러 개의 출력 코드를 위에서 아래 순서로 작성한다.</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>출력 결과는 코드가 작성된 순서대로 나타난다</li>
+            <li>JavaScript는 위에서 아래로 순차 실행된다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 오류 메시지 확인</h3>
+          <ol>
+            <li>선언되지 않은 값을 출력해 본다.</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li>Console에 오류 메시지가 출력된다</li>
+            <li>오류 메시지가 문제 해결의 단서가 됨을 인식한다</li>
+          </ul>
+          <hr />
+          <h3>정리</h3>
+          <ul>
+            <li>Console은 실행 결과와 오류를 확인하는 도구다</li>
+            <li>JavaScript는 작성된 순서대로 실행된다</li>
+            <li>오류 메시지는 문제 해결의 출발점이다</li>
+          </ul>
+          <hr />
+          <h2>5. JavaScript와 DOM 조작</h2>
+          <blockquote>
+            <p>JavaScript는 브라우저가 만들어 둔 DOM을 조작하여
+              화면의 구조와 상태를 변경한다.</p>
+          </blockquote>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>5-dom-manipulation.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Day 1 - DOM Manipulation&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <hr />
+  &lt;h1 id=&quot;title&quot;&gt;원래 화면&lt;/h1&gt;
 
-        <h3>준비</h3>
+  &lt;script&gt;
+    // Step별 실습 코드는 이 안에 작성한다
+  &lt;/script&gt;
 
-        <ul>
-          <li>브라우저에서 파일을 직접 열어 실행한다</li>
-          <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
-          <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 1. JavaScript 실행 여부 확인</h3>
-
-        <ol>
-          <li>Console에 문자열을 출력한다.</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>페이지를 새로고침할 때마다 Console에 동일한 메시지가 출력된다</li>
-          <li>JavaScript 코드가 실제로 실행되고 있음을 확인한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 실행 순서 확인</h3>
-
-        <ol>
-          <li>여러 개의 출력 코드를 위에서 아래 순서로 작성한다.</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>출력 결과는 코드가 작성된 순서대로 나타난다</li>
-          <li>JavaScript는 위에서 아래로 순차 실행된다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 오류 메시지 확인</h3>
-
-        <ol>
-          <li>선언되지 않은 값을 출력해 본다.</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>Console에 오류 메시지가 출력된다</li>
-          <li>오류 메시지가 문제 해결의 단서가 됨을 인식한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>Console은 실행 결과와 오류를 확인하는 도구다</li>
-          <li>JavaScript는 작성된 순서대로 실행된다</li>
-          <li>오류 메시지는 문제 해결의 출발점이다</li>
-        </ul>
-
-        <hr />
-
-        <h2>5. JavaScript와 DOM 조작</h2>
-
-        <blockquote>
-          <p>JavaScript는 브라우저가 만들어 둔 DOM을 조작하여<br />
-            화면의 구조와 상태를 변경한다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>5-dom-manipulation.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Day 1 - DOM Manipulation<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>원래 화면<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="c1">// Step별 실습 코드는 이 안에 작성한다</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h3>준비</h3>
-
-        <ul>
-          <li>브라우저에서 파일을 직접 열어 실행한다</li>
-          <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
-          <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 1. 배경색 변경</h3>
-
-        <h3>1. 아래 코드를 작성하고 새로고침한다</h3>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">background</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;black&quot;</span><span class="p">;</span>
+          <hr />
+          <h3>준비</h3>
+          <ul>
+            <li>브라우저에서 파일을 직접 열어 실행한다</li>
+            <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
+            <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
+          </ul>
+          <hr />
+          <h3>Step 1. 배경색 변경</h3>
+          <h3>1. 아래 코드를 작성하고 새로고침한다</h3>
+          <pre><code class="language-javascript">document.body.style.background = &quot;black&quot;;
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h3>체크 포인트</h3>
-
-        <ul>
-          <li>페이지의 <strong>배경색이 검정색으로 바뀐다</strong></li>
-          <li><code>document.body.style</code><br />
-            → <code>&lt;body&gt;</code> 요소에 <strong>직접 적용되는 인라인 스타일을 다루는 객체</strong></li>
-        </ul>
-
-        <hr />
-
-        <h3>객체 구조 이해</h3>
-
-        <ul>
-          <li>
-            <p><strong><code>document</code></strong><br />
-              현재 웹페이지 전체를 나타내는 <strong>DOM 최상위 객체</strong></p>
-          </li>
-          <li>
-            <p><strong><code>document.body</code></strong><br />
-              현재 문서의 <code>&lt;body&gt;</code> 태그에 해당하는 <strong>DOM 요소 객체</strong><br />
-              브라우저가 HTML을 해석할 때 <strong>자동으로 생성되며 항상 존재한다</strong></p>
-          </li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 글자색 변경</h3>
-
-        <ol>
-          <li>아래 코드를 이어서 작성하고 새로고침한다.</li>
-        </ol>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">style</span><span class="p">.</span><span class="nx">color</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;lime&quot;</span><span class="p">;</span>
+          <hr />
+          <h3>체크 포인트</h3>
+          <ul>
+            <li>페이지의 <strong>배경색이 검정색으로 바뀐다</strong></li>
+            <li><code>document.body.style</code>
+              → <code>&lt;body&gt;</code> 요소에 <strong>직접 적용되는 인라인 스타일을 다루는 객체</strong></li>
+          </ul>
+          <hr />
+          <h3>객체 구조 이해</h3>
+          <ul>
+            <li>
+              <p><strong><code>document</code></strong>
+                현재 웹페이지 전체를 나타내는 <strong>DOM 최상위 객체</strong></p>
+            </li>
+            <li>
+              <p><strong><code>document.body</code></strong>
+                현재 문서의 <code>&lt;body&gt;</code> 태그에 해당하는 <strong>DOM 요소 객체</strong>
+                브라우저가 HTML을 해석할 때 <strong>자동으로 생성되며 항상 존재한다</strong></p>
+            </li>
+          </ul>
+          <hr />
+          <h3>Step 2. 글자색 변경</h3>
+          <ol>
+            <li>아래 코드를 이어서 작성하고 새로고침한다.</li>
+          </ol>
+          <pre><code class="language-javascript">document.body.style.color = &quot;lime&quot;;
 </code></pre>
-        </div>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>글자색이 연두색으로 바뀐다</li>
-          <li>CSS를 파일로 바꾸는 게 아니라, "DOM 객체의 style 값"을 실행 중에 바꾼 것이다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. DOM 내용 바꾸기</h3>
-
-        <ol>
-          <li>아래 코드를 작성하고 새로고침한다.</li>
-        </ol>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s2">&quot;&lt;h2&gt;JavaScript가 바꾼 화면&lt;/h2&gt;&quot;</span><span class="p">;</span>
+          <p>체크 포인트</p>
+          <ul>
+            <li>글자색이 연두색으로 바뀐다</li>
+            <li>CSS를 파일로 바꾸는 게 아니라, &quot;DOM 객체의 style 값&quot;을 실행 중에 바꾼 것이다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. DOM 내용 바꾸기</h3>
+          <ol>
+            <li>아래 코드를 작성하고 새로고침한다.</li>
+          </ol>
+          <pre><code class="language-javascript">document.body.innerHTML = &quot;&lt;h2&gt;JavaScript가 바꾼 화면&lt;/h2&gt;&quot;;
 </code></pre>
-        </div>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>기존 <code>&lt;h1&gt;</code>이 사라지고 <code>&lt;h2&gt;</code>가 나타난다</li>
-          <li>HTML 파일을 수정한 게 아니라, 브라우저 메모리의 DOM 내용을 바꾼 것이다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 4. 바뀐 DOM 값 출력</h3>
-
-        <ol>
-          <li>아래 코드를 추가해 DOM의 현재 상태를 출력한다.</li>
-        </ol>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">body</span><span class="p">.</span><span class="nx">innerHTML</span><span class="p">);</span>
+          <p>체크 포인트</p>
+          <ul>
+            <li>기존 <code>&lt;h1&gt;</code>이 사라지고 <code>&lt;h2&gt;</code>가 나타난다</li>
+            <li>HTML 파일을 수정한 게 아니라, 브라우저 메모리의 DOM 내용을 바꾼 것이다</li>
+          </ul>
+          <hr />
+          <h3>Step 4. 바뀐 DOM 값 출력</h3>
+          <ol>
+            <li>아래 코드를 추가해 DOM의 현재 상태를 출력한다.</li>
+          </ol>
+          <pre><code class="language-javascript">console.log(document.body.innerHTML);
 </code></pre>
-        </div>
+          <p>체크 포인트</p>
+          <ul>
+            <li>Console에 현재 DOM의 HTML 문자열이 출력된다</li>
+            <li>DOM이 바뀌면 화면도 함께 바뀐다는 연결을 확인한다</li>
+          </ul>
+          <hr />
+          <h3>정리</h3>
+          <ul>
+            <li>JavaScript는 화면을 직접 그리는 게 아니라 DOM을 바꾼다</li>
+            <li>DOM이 바뀌면 브라우저가 다시 렌더링하여 화면에 반영한다</li>
+          </ul>
+          <hr />
+          <h2>6. JavaScript 실행 시점과 <code>&lt;script&gt;</code> 위치</h2>
+          <blockquote>
+            <p><code>&lt;script&gt;</code> 위치에 따라 DOM 접근 가능 시점이 달라진다.</p>
+          </blockquote>
+          <h3>실습 가이드</h3>
+          <p>📄 파일명: <code>6-script-order.html</code></p>
+          <pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;ko&quot;&gt;
+&lt;head&gt;
+  &lt;meta charset=&quot;UTF-8&quot; /&gt;
+  &lt;title&gt;Day 1 - Script Order&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
 
-        <p>체크 포인트</p>
+  &lt;script&gt;
+    // Step별 실습 코드는 이 안에 작성한다
+  &lt;/script&gt;
 
-        <ul>
-          <li>Console에 현재 DOM의 HTML 문자열이 출력된다</li>
-          <li>DOM이 바뀌면 화면도 함께 바뀐다는 연결을 확인한다</li>
-        </ul>
+  &lt;h1 id=&quot;title&quot;&gt;제목&lt;/h1&gt;
 
-        <hr />
+  &lt;script&gt;
+    // Step별 실습 코드는 이 안에 작성한다
+  &lt;/script&gt;
 
-        <h3>정리</h3>
-
-        <ul>
-          <li>JavaScript는 화면을 직접 그리는 게 아니라 DOM을 바꾼다</li>
-          <li>DOM이 바뀌면 브라우저가 다시 렌더링하여 화면에 반영한다</li>
-        </ul>
-
-        <hr />
-
-        <h2>6. JavaScript 실행 시점과 <code>&lt;script&gt;</code> 위치</h2>
-
-        <blockquote>
-          <p><code>&lt;script&gt;</code> 위치에 따라 DOM 접근 가능 시점이 달라진다.</p>
-        </blockquote>
-
-        <h3>실습 가이드</h3>
-
-        <p>📄 파일명: <code>6-script-order.html</code></p>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="cp">&lt;!DOCTYPE html&gt;</span>
-<span class="p">&lt;</span><span class="nt">html</span> <span class="na">lang</span><span class="o">=</span><span class="s">&quot;ko&quot;</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">head</span><span class="p">&gt;</span>
-  <span class="p">&lt;</span><span class="nt">meta</span> <span class="na">charset</span><span class="o">=</span><span class="s">&quot;UTF-8&quot;</span> <span class="p">/&gt;</span>
-  <span class="p">&lt;</span><span class="nt">title</span><span class="p">&gt;</span>Day 1 - Script Order<span class="p">&lt;/</span><span class="nt">title</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">head</span><span class="p">&gt;</span>
-<span class="p">&lt;</span><span class="nt">body</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="c1">// Step별 실습 코드는 이 안에 작성한다</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">h1</span> <span class="na">id</span><span class="o">=</span><span class="s">&quot;title&quot;</span><span class="p">&gt;</span>제목<span class="p">&lt;/</span><span class="nt">h1</span><span class="p">&gt;</span>
-
-  <span class="p">&lt;</span><span class="nt">script</span><span class="p">&gt;</span>
-<span class="w">    </span><span class="c1">// Step별 실습 코드는 이 안에 작성한다</span>
-<span class="w">  </span><span class="p">&lt;/</span><span class="nt">script</span><span class="p">&gt;</span>
-
-<span class="p">&lt;/</span><span class="nt">body</span><span class="p">&gt;</span>
-<span class="p">&lt;/</span><span class="nt">html</span><span class="p">&gt;</span>
+&lt;/body&gt;
+&lt;/html&gt;
 </code></pre>
-        </div>
-
-        <hr />
-
-        <h3>준비</h3>
-
-        <ul>
-          <li>브라우저에서 파일을 직접 열어 실행한다</li>
-          <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
-          <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 1. 위쪽 <code>&lt;script&gt;</code>에서 요소 찾기</h3>
-
-        <ol>
-          <li>첫 번째 <code>&lt;script&gt;</code> 안에 아래 코드를 작성한다.</li>
-        </ol>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">));</span>
+          <hr />
+          <h3>준비</h3>
+          <ul>
+            <li>브라우저에서 파일을 직접 열어 실행한다</li>
+            <li>개발자 도구(Console)를 열어둔 상태에서 진행한다</li>
+            <li>각 Step마다 실행 결과를 먼저 예측한 뒤 실행한다</li>
+          </ul>
+          <hr />
+          <h3>Step 1. 위쪽 <code>&lt;script&gt;</code>에서 요소 찾기</h3>
+          <ol>
+            <li>첫 번째 <code>&lt;script&gt;</code> 안에 아래 코드를 작성한다.</li>
+          </ol>
+          <pre><code class="language-javascript">console.log(document.getElementById(&quot;title&quot;));
 </code></pre>
-        </div>
-
-        <p><code>document.getElementById</code>는 HTML 문서(DOM)에서 지정한 id 값을 가진 요소를 찾아 그 요소 객체를 반환하는 메서드이다.</p>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>많은 경우 <code>null</code>이 출력된다</li>
-          <li>이 시점에는 아직 <code>&lt;h1 id="title"&gt;</code>이 DOM에 만들어지지 않았다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 2. 아래쪽 <code>&lt;script&gt;</code>에서 요소 찾기</h3>
-
-        <ol>
-          <li>두 번째 <code>&lt;script&gt;</code> 안에도 같은 코드를 작성한다.</li>
-        </ol>
-
-        <div class="codehilite">
-          <pre><span></span><code><span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">&quot;title&quot;</span><span class="p">));</span>
+          <p><code>document.getElementById</code>는 HTML 문서(DOM)에서 지정한 id 값을 가진 요소를 찾아 그 요소 객체를 반환하는 메서드이다.</p>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>null</code>이 출력된다</li>
+            <li>이 시점에는 아직 <code>&lt;h1 id=&quot;title&quot;&gt;</code>이 DOM에 만들어지지 않았다</li>
+          </ul>
+          <hr />
+          <h3>Step 2. 아래쪽 <code>&lt;script&gt;</code>에서 요소 찾기</h3>
+          <ol>
+            <li>두 번째 <code>&lt;script&gt;</code> 안에도 같은 코드를 작성한다.</li>
+          </ol>
+          <pre><code class="language-javascript">console.log(document.getElementById(&quot;title&quot;));
 </code></pre>
-        </div>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>이번에는 <code>&lt;h1 id="title"&gt;...&lt;/h1&gt;</code> 요소가 출력된다</li>
-          <li><code>&lt;h1&gt;</code>이 먼저 DOM으로 만들어진 뒤, 아래 script가 실행되기 때문이다</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 3. 실행 시점 문제로 생기는 흔한 증상 정리</h3>
-
-        <ol>
-          <li>아래 체크리스트를 보며 원인을 스스로 점검한다.</li>
-        </ol>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li><code>id</code> 오타가 없는가</li>
-          <li>따옴표를 제대로 닫았는가</li>
-          <li><code>&lt;script&gt;</code>가 요소보다 위에 있지 않은가</li>
-        </ul>
-
-        <hr />
-
-        <h3>Step 4. 해결 방향 미리보기</h3>
-
-        <ol>
-          <li>가장 쉬운 해결을 적용해 본다.</li>
-        </ol>
-
-        <ul>
-          <li><code>&lt;script&gt;</code>를 <code>&lt;/body&gt;</code> 바로 위로 옮긴다</li>
-        </ul>
-
-        <p>체크 포인트</p>
-
-        <ul>
-          <li>요소 선택이 안정적으로 동작한다</li>
-          <li>"DOM 생성 이후에 JS 실행"이라는 원칙이 생긴다</li>
-        </ul>
-
-        <hr />
-
-        <h3>정리</h3>
-
-        <ul>
-          <li>브라우저는 HTML을 위에서 아래로 해석한다</li>
-          <li><code>&lt;script&gt;</code>를 만나면 그 시점에 즉시 실행된다</li>
-          <li>DOM이 만들어지기 전에는 요소를 찾을 수 없을 수 있다</li>
-        </ul>
-
-        <hr />
-
-        <h2>Day 1 핵심 정리</h2>
-
-        <ul>
-          <li>JavaScript는 실행 환경 위에서 동작한다</li>
-          <li>브라우저는 HTML을 DOM으로 변환한다</li>
-          <li>JavaScript는 DOM을 조작한다</li>
-          <li><code>&lt;script&gt;</code> 위치에 따라 실행 결과가 달라진다</li>
-        </ul>
-
-        <div class="footer">© 2026 한국IT교육원. All rights reserved.</div>
-      </article>
+          <p>체크 포인트</p>
+          <ul>
+            <li>이번에는 <code>&lt;h1 id=&quot;title&quot;&gt;...&lt;/h1&gt;</code> 요소가 출력된다</li>
+            <li><code>&lt;h1&gt;</code>이 먼저 DOM으로 만들어진 뒤, 아래 script가 실행되기 때문이다</li>
+          </ul>
+          <hr />
+          <h3>Step 3. 실행 시점 문제로 생기는 흔한 증상 정리</h3>
+          <ol>
+            <li>아래 체크리스트를 보며 원인을 스스로 점검한다.</li>
+          </ol>
+          <p>체크 포인트</p>
+          <ul>
+            <li><code>id</code> 오타가 없는가</li>
+            <li>따옴표를 제대로 닫았는가</li>
+            <li><code>&lt;script&gt;</code>가 요소보다 위에 있지 않은가</li>
+          </ul>
+          <hr />
+          <h3>Step 4. 해결 방향 미리보기</h3>
+          <ol>
+            <li>가장 쉬운 해결을 적용해 본다.</li>
+          </ol>
+          <ul>
+            <li><code>&lt;script&gt;</code>를 <code>&lt;/body&gt;</code> 바로 위로 옮긴다</li>
+          </ul>
+          <p>체크 포인트</p>
+          <ul>
+            <li>요소 선택이 안정적으로 동작한다</li>
+            <li>&quot;DOM 생성 이후에 JS 실행&quot;이라는 원칙이 생긴다</li>
+          </ul>
+          <hr />
+          <h2>1일차 핵심 정리</h2>
+          <ul>
+            <li>
+              <p>JavaScript는 브라우저나 Node.js 같은 실행 환경(Runtime) 위에서만 동작한다.</p>
+            </li>
+            <li>
+              <p>브라우저는 HTML → DOM 생성 → CSS 적용 → JavaScript 실행 → 화면 갱신 흐름으로 동작한다.</p>
+            </li>
+            <li>
+              <p>HTML은 DOM을 만들기 위한 설계도,<br />
+                CSS는 DOM에 적용되는 스타일 규칙,<br />
+                JavaScript는 실행 중 DOM을 조작하는 도구다.</p>
+            </li>
+            <li>
+              <p>JavaScript 코드는 위에서 아래로 순차 실행된다.</p>
+            </li>
+            <li>
+              <p>Console은 실행 결과 확인과 오류 원인 파악의 핵심 도구다.</p>
+            </li>
+            <li>
+              <p>JavaScript는 화면을 직접 그리지 않고 DOM을 변경하며,<br />
+                DOM이 바뀌면 브라우저가 다시 렌더링한다.</p>
+            </li>
+            <li>
+              <p><code>&lt;script&gt;</code> 위치에 따라 DOM 접근 가능 시점이 달라진다.</p>
+            </li>
+            <li>
+              <p>일반적으로 DOM 생성 이후에 JavaScript를 실행해야 안전하다<br />
+                (보통 <code>&lt;script&gt;</code>를
+                <code>&lt;/body&gt;</code> 직전에 둔다).
+              </p>
+            </li>
+          </ul>
+        </article>
+      </div>
     </main>
   </div>
 
   <script src="js/common.js"></script>
-
 </body>
 
 </html>
