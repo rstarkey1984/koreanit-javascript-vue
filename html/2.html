@@ -350,9 +350,9 @@ console.log(a, b);
           </ul>
           <hr />
           <h3>Step 5. 출력 결과를 문장으로 읽기</h3>
-          <pre><code class="language-javascript">let x = 10;
-console.log(&quot;x는 지금:&quot;, x);
-console.log(&quot;x + 5 결과:&quot;, x + 5);
+          <pre><code class="language-javascript">let y = 10;
+console.log(&quot;y는 지금:&quot;, y);
+console.log(&quot;y + 5 결과:&quot;, y + 5);
 </code></pre>
           <p>체크 포인트</p>
           <ul>
@@ -360,11 +360,11 @@ console.log(&quot;x + 5 결과:&quot;, x + 5);
           </ul>
           <hr />
           <h3>Step 6. <code>var</code> 재선언 문제 직접 보기</h3>
-          <pre><code class="language-javascript">var x = 10;
-console.log(&quot;x 처음 값:&quot;, x);
+          <pre><code class="language-javascript">var z = 10;
+console.log(&quot;z 처음 값:&quot;, z);
 
-var x = 20;
-console.log(&quot;x 다시 선언 후:&quot;, x);
+var z = 20;
+console.log(&quot;z 다시 선언 후:&quot;, z);
 </code></pre>
           <p>체크 포인트</p>
           <ul>
@@ -378,11 +378,7 @@ console.log(&quot;x 다시 선언 후:&quot;, x);
           </ul>
           <hr />
           <h3>Step 7. <code>let</code> 재선언 불가 확인</h3>
-          <pre><code class="language-javascript">let y = 10;
-console.log(y);
-
-// let y = 20; // 주석 해제 시 오류
-</code></pre>
+          <pre><code class="language-javascript">let y = 10;</code></pre>
           <p>체크 포인트</p>
           <ul>
             <li>같은 이름 재선언 시 즉시 오류</li>
@@ -411,10 +407,12 @@ console.log(pi);
           <hr />
           <h3>Step 10. <code>const</code> 객체 / 배열 내부 변경 확인</h3>
           <pre><code class="language-javascript">const user = { name: &quot;kim&quot; };
+console.log(user);            
 user.name = &quot;lee&quot;;
 console.log(user);
 
 const list = [1, 2, 3];
+console.log(list);
 list.push(4);
 console.log(list);
 </code></pre>
@@ -477,7 +475,7 @@ let isLogin;     // true / false 값
 10 - 3
 10 * 2
 10 / 2
-10 % 3
+10 % 2
 </code></pre>
           <h3>문자열과 숫자</h3>
           <pre><code class="language-javascript">&quot;10&quot; + 5   // &quot;105&quot;
@@ -523,6 +521,7 @@ true &amp;&amp; false
             <li><code>10 - 3</code></li>
             <li><code>10 * 2</code></li>
             <li><code>10 / 2</code></li>
+            <li><code>10 % 2</code></li>
           </ul>
           <p>체크 포인트</p>
           <ul>
@@ -631,7 +630,13 @@ if (score &gt;= 60) {
 
   &lt;script&gt;
     // Step별 실습 코드는 이 안에 작성한다
-  &lt;/script&gt;
+    let score = 80;
+
+    if (score >= 60) {
+      console.log("합격");
+    }
+
+  &lt;/script&gt;  
 
 &lt;/body&gt;
 &lt;/html&gt;
@@ -928,13 +933,14 @@ if (score &gt;= 60) {
           <hr />
           <h2>6. 함수(Function)</h2>
           <blockquote>
-            <p>함수는 <strong>동작(로직)을 묶은 실행 단위</strong>다.</p>
+            <p>함수는 여러 줄의 동작을 하나로 묶어, 필요할 때 실행하는 코드 묶음이다.</p>
           </blockquote>
-          <p>함수는 &quot;필요할 때 실행할 코드&quot;를 미리 정의해두는 방식이다.</p>
+          <p>함수는 바로 실행되지 않고, “이런 동작을 나중에 하겠다”라고 미리 정의해 두는 구조다.</p>
           <pre><code class="language-javascript">function add(a, b) {
   return a + b;
 }
 </code></pre>
+          <p>“add라는 동작을 하나 만들어 두고, 두 값을 받아서 더한 결과를 돌려준다.”</p>
           <h3>핵심 포인트</h3>
           <ul>
             <li>함수는 정의만으로는 실행되지 않는다</li>

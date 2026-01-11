@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+  <meta charset="UTF-8" />
+  <title>Day 2 - 값과 변수</title>
+</head>
+
+<body>
+
+  <h1>값과 변수 실습</h1>
+
+  <script>
+    // Step별 실습 코드는 이 안에 작성한다
+    console.log(typeof 10);
+    console.log(typeof "10");
+    console.log(typeof true);
+    console.log(typeof null, typeof undefined);
+
+    let x = 10;
+    console.log(x + 5);
+
+    x = "10";
+    console.log(x + 5);
+    let a = 10;
+    let b = a;
+
+    console.log(a, b);
+
+    a = 20;
+    console.log(a, b);
+
+    let y = 10;
+    console.log("y는 지금:", y);
+    console.log("y + 5 결과:", y + 5);
+
+    var z = 10;
+    console.log("z 처음 값:", z);
+
+    var z = 20;
+    console.log("z 다시 선언 후:", z);
+
+    let score = 10;
+    score = 30;
+    console.log(score);
+
+    const pi = 3.14;
+    console.log(pi);
+
+    // pi = 3.14159; // 오류
+
+    const user = { name: "kim" };
+    console.log(user);
+    user.name = "lee";
+    console.log(user);
+
+    const list = [1, 2, 3];
+    list.push(4);
+    console.log(list);
+
+
+
+  </script>
+
+</body>
+
+</html>
