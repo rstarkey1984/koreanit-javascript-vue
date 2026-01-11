@@ -286,3 +286,167 @@ img {
     top: auto
   }
 }
+
+/* index hero */
+.doc-hero {
+  margin: 6px 0 18px;
+}
+
+.doc-hero h1 {
+  margin: 0 0 8px;
+}
+
+.hero-sub {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.55;
+}
+
+/* card utilities */
+.card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  margin: 16px 0;
+}
+
+.card-pad {
+  padding: 18px 20px;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.h3 {
+  margin: 0 0 10px;
+  font-size: 16px;
+}
+
+.section-title {
+  margin: 28px 0 10px;
+}
+
+.list {
+  margin: 10px 0 0;
+  padding-left: 18px;
+}
+
+.list li {
+  margin: 6px 0;
+}
+
+/* key-value list */
+.kv {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.kv li {
+  display: flex;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.kv li:last-child {
+  border-bottom: 0;
+}
+
+.kv .k {
+  min-width: 110px;
+  color: var(--muted);
+}
+
+.kv .v {
+  color: var(--text);
+}
+
+/* grid */
+.grid-2 {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 900px) {
+  .grid-2 {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+/* collapsible header */
+.card-head {
+  width: 100%;
+  background: transparent;
+  border: 0;
+  color: var(--text);
+  cursor: pointer;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.card-head-text h2 {
+  margin: 0 0 4px;
+  font-size: 18px;
+}
+
+.card-head-text p {
+  margin: 0;
+  font-size: 13px;
+}
+
+.chev {
+  transition: transform 0.25s ease;
+}
+
+.course-card.open .chev {
+  transform: rotate(180deg);
+}
+
+.card-body {
+  padding: 0 20px 18px;
+}
+
+/* day cards */
+.day-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.day-kicker {
+  color: var(--muted);
+  font-size: 13px;
+  margin-bottom: 6px;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.quote {
+  margin: 12px 0;
+  padding: 10px 12px;
+  border-left: 3px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+}
+
+.quote p {
+  margin: 0;
+  color: var(--muted);
+}
