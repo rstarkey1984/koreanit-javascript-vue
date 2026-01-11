@@ -1,218 +1,13 @@
 <!doctype html>
 <html lang="ko">
+
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>JavaScript &amp; Vue 강의안</title>
-  <style>
-:root{
-  --bg:#0b1020;
-  --panel:rgba(255,255,255,.06);
-  --panel2:rgba(255,255,255,.085);
-  --border:rgba(255,255,255,.12);
-  --text:rgba(255,255,255,.92);
-  --muted:rgba(255,255,255,.72);
-  --subtle:rgba(255,255,255,.55);
-  --accent:#7aa2ff;
-  --accent2:#a7f3d0;
-  --codebg:rgba(0,0,0,.35);
-  --shadow:0 12px 40px rgba(0,0,0,.45);
-  --radius:18px;
-  --radius2:14px;
-}
-*{box-sizing:border-box}
-html,body{height:100%}
-body{
-  margin:0;
-  font-family: system-ui,-apple-system,Segoe UI,Roboto,Helvetica,Arial,"Apple SD Gothic Neo","Noto Sans KR","Malgun Gothic",sans-serif;
-  background: radial-gradient(1200px 800px at 15% 0%, rgba(122,162,255,.15), transparent 60%),
-              radial-gradient(900px 700px at 85% 0%, rgba(167,243,208,.10), transparent 55%),
-              var(--bg);
-  color:var(--text);
-  line-height:1.6;
-}
-a{color:var(--accent); text-decoration:none}
-a:hover{text-decoration:underline}
-.layout{
-  display:grid;
-  grid-template-columns: 320px 1fr;
-  gap:20px;
-  padding:20px;
-  max-width: 1280px;
-  margin:0 auto;
-}
-.sidebar{
-  position: sticky;
-  top: 20px;
-  align-self:start;
-  background: linear-gradient(180deg,var(--panel2),var(--panel));
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  overflow:hidden;
-}
-.brand{
-  padding:16px 16px 10px 16px;
-  border-bottom:1px solid var(--border);
-}
-.brand .kicker{
-  font-size:12px;
-  color:var(--muted);
-  letter-spacing:.2px;
-}
-.brand .title{
-  margin:6px 0 0 0;
-  font-size:16px;
-  font-weight:700;
-}
-.nav{
-  padding:10px;
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-}
-.nav a{
-  display:block;
-  padding:10px 12px;
-  border-radius: 12px;
-  color:var(--text);
-  border:1px solid transparent;
-}
-.nav a.active{
-  background: rgba(122,162,255,.12);
-  border-color: rgba(122,162,255,.25);
-}
-.nav a:hover{
-  background: rgba(255,255,255,.05);
-  border-color: rgba(255,255,255,.08);
-  text-decoration:none;
-}
-.nav .small{
-  font-size:12px; color:var(--subtle); padding:6px 12px 0 12px;
-}
-.main{
-  background: linear-gradient(180deg,var(--panel2),var(--panel));
-  border:1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  padding: 22px 26px;
-  overflow:hidden;
-}
-.topbar{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  padding-bottom: 14px;
-  border-bottom:1px solid var(--border);
-  margin-bottom: 18px;
-}
-.topbar .page-title{
-  margin:0;
-  font-size: 20px;
-  font-weight: 800;
-}
-.badge{
-  font-size:12px;
-  color:var(--muted);
-  border:1px solid var(--border);
-  background: rgba(0,0,0,.12);
-  padding:6px 10px;
-  border-radius: 999px;
-}
-.content h1{font-size:28px; margin: 0 0 14px 0}
-.content h2{font-size:22px; margin: 26px 0 10px 0}
-.content h3{font-size:18px; margin: 20px 0 8px 0}
-.content h4{font-size:16px; margin: 18px 0 6px 0}
-.content p{margin: 10px 0}
-.content blockquote{
-  margin: 12px 0;
-  padding: 10px 14px;
-  background: rgba(122,162,255,.08);
-  border-left: 4px solid rgba(122,162,255,.35);
-  border-radius: 12px;
-  color: var(--text);
-}
-.content hr{
-  border:0;
-  border-top:1px solid var(--border);
-  margin: 18px 0;
-}
-.content ul, .content ol{padding-left: 22px}
-.content li{margin: 6px 0}
-.content code{
-  font-family: ui-monospace,SFMono-Regular,Menlo,Consolas,"Liberation Mono",monospace;
-  background: var(--codebg);
-  border:1px solid rgba(255,255,255,.10);
-  padding: 0.12em 0.35em;
-  border-radius: 8px;
-}
-.content pre{
-  background: rgba(0,0,0,.35);
-  border:1px solid rgba(255,255,255,.12);
-  border-radius: var(--radius2);
-  padding: 14px 14px;
-  overflow:auto;
-  position: relative;
-}
-.content pre code{
-  background: transparent;
-  border:0;
-  padding:0;
-  border-radius:0;
-  color: var(--text);
-}
-.copy-btn{
-  position:absolute;
-  top:10px;
-  right:10px;
-  font-size:12px;
-  padding:6px 10px;
-  border-radius: 999px;
-  border:1px solid rgba(255,255,255,.14);
-  background: rgba(0,0,0,.25);
-  color: var(--text);
-  cursor:pointer;
-}
-.copy-btn:hover{background: rgba(0,0,0,.38)}
-table{
-  border-collapse: collapse;
-  width: 100%;
-  margin: 14px 0;
-  overflow:hidden;
-  border-radius: 12px;
-  border:1px solid rgba(255,255,255,.12);
-}
-th,td{
-  padding: 10px 12px;
-  border-bottom: 1px solid rgba(255,255,255,.10);
-  vertical-align: top;
-}
-th{
-  text-align:left;
-  background: rgba(255,255,255,.06);
-}
-tr:last-child td{border-bottom:0}
-img{
-  max-width:100%;
-  height:auto;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.12);
-  background: rgba(0,0,0,.25);
-}
-.footer{
-  margin-top: 26px;
-  padding-top: 14px;
-  border-top:1px solid var(--border);
-  color:var(--subtle);
-  font-size:12px;
-}
-@media (max-width: 980px){
-  .layout{grid-template-columns: 1fr}
-  .sidebar{position: relative; top:auto}
-}
-</style>
+  <link rel="stylesheet" href="css/common.css">
 </head>
+
 <body>
   <div class="layout">
     <aside class="sidebar" aria-label="강의안 내비게이션">
@@ -222,11 +17,11 @@ img{
       </div>
       <nav class="nav">
         <a class="active" href="index.html">JavaScript &amp; Vue 강의안</a>
-<a class="" href="1.html">Day 1 — 실행환경과 JavaScript 실행 흐름 이해</a>
-<a class="" href="2.html">Day 2 — JavaScript 데이터와 이벤트의 기본 구조</a>
-<a class="" href="3.html">Day 3 — DOM과 이벤트 기반 UI 제어</a>
-<a class="" href="4.html">Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
-<a class="" href="5.html">Day 5 — Vue.js 실습 (CDN 방식)</a>
+        <a class="" href="1.html">Day 1 — 실행환경과 JavaScript 실행 흐름 이해</a>
+        <a class="" href="2.html">Day 2 — JavaScript 데이터와 이벤트의 기본 구조</a>
+        <a class="" href="3.html">Day 3 — DOM과 이벤트 기반 UI 제어</a>
+        <a class="" href="4.html">Day 4 — 프론트엔드 도구의 진화와 Vue 맛보기</a>
+        <a class="" href="5.html">Day 5 — Vue.js 실습 (CDN 방식)</a>
         <div class="small">파일 기준: README.md</div>
       </nav>
     </aside>
@@ -234,184 +29,167 @@ img{
     <main class="main">
       <div class="topbar">
         <h1 class="page-title">JavaScript &amp; Vue 강의안</h1>
-        <span class="badge">HTML 변환</span>
+        <span class="badge">HTML 문서</span>
       </div>
 
       <article class="content">
         <h1>JavaScript &amp; Vue 강의안</h1>
 
-<ul>
-<li>대상: 마이스터고등학교</li>
-<li><p>총 수업 시간: 24시간</p>
+        <ul>
+          <li>대상: 마이스터고등학교</li>
+          <li>
+            <p>총 수업 시간: 24시간</p>
 
-<ul>
-<li>월요일: 3시간</li>
-<li>화·수·목요일: 6시간</li>
-<li>금요일: 3시간</li>
-</ul></li>
-<li>IDE: Visual Studio Code (VS Code)</li>
-</ul>
+            <ul>
+              <li>월요일: 3시간</li>
+              <li>화·수·목요일: 6시간</li>
+              <li>금요일: 3시간</li>
+            </ul>
+          </li>
+          <li>IDE: Visual Studio Code (VS Code)</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h2>강의 성격 요약</h2>
+        <h2>강의 성격 요약</h2>
 
-<p>이 강의는 <strong>JavaScript를 구조적으로 다루는 능력을 기르는 강의</strong>이며<br />
-Vue는 프레임워크의 역할을 이해하기 위한 <strong>마지막 단계의 비교·체험 도구</strong>로 사용한다.</p>
+        <p>이 강의는 <strong>JavaScript를 구조적으로 다루는 능력을 기르는 강의</strong>이며<br />
+          Vue는 프레임워크의 역할을 이해하기 위한 <strong>마지막 단계의 비교·체험 도구</strong>로 사용한다.</p>
 
-<p>이 강의의 목표는<br />
-<strong>프레임워크에 의존하지 않고도<br />
-JavaScript 코드의 실행 흐름과 데이터 흐름을 설명할 수 있는 개발자</strong>를 만드는 것이다.</p>
+        <p>이 강의의 목표는<br />
+          <strong>프레임워크에 의존하지 않고도<br />
+            JavaScript 코드의 실행 흐름과 데이터 흐름을 설명할 수 있는 개발자</strong>를 만드는 것이다.
+        </p>
 
-<p>Vue는 JavaScript로 작성한 코드 구조와 실행 흐름을 되돌아보기 위한<br />
-<strong>보조 도구이자 비교 대상</strong>일 뿐,<br />
-Vue 자체의 문법 숙달이 목적은 아니다.</p>
+        <p>Vue는 JavaScript로 작성한 코드 구조와 실행 흐름을 되돌아보기 위한<br />
+          <strong>보조 도구이자 비교 대상</strong>일 뿐,<br />
+          Vue 자체의 문법 숙달이 목적은 아니다.
+        </p>
 
-<hr />
+        <hr />
 
-<h2>JavaScript를 배우는 목적</h2>
+        <h2>JavaScript를 배우는 목적</h2>
 
-<p>JavaScript를 공부하는 목적은 다음 세 가지다.</p>
+        <p>JavaScript를 공부하는 목적은 다음 세 가지다.</p>
 
-<ul>
-<li>사용자의 행동에 반응하기 위해서</li>
-<li>서버와 데이터를 주고받기 위해서</li>
-<li>화면(UI)을 동적으로 제어하기 위해서</li>
-</ul>
+        <ul>
+          <li>사용자의 행동에 반응하기 위해서</li>
+          <li>서버와 데이터를 주고받기 위해서</li>
+          <li>화면(UI)을 동적으로 제어하기 위해서</li>
+        </ul>
 
-<p>이 강의에서는 문법 암기보다<br />
-<strong>코드가 어떤 순서로 실행되고, 데이터가 어떻게 흘러가는지</strong>를 이해하는 데 집중한다.</p>
+        <p>이 강의에서는 문법 암기보다<br />
+          <strong>코드가 어떤 순서로 실행되고, 데이터가 어떻게 흘러가는지</strong>를 이해하는 데 집중한다.
+        </p>
 
-<hr />
+        <hr />
 
-<h1>Day 1 (월 · 3시간)</h1>
+        <h1>Day 1 (월 · 3시간)</h1>
 
-<h2>실행환경과 JavaScript 실행 흐름 이해</h2>
+        <h2>실행환경과 JavaScript 실행 흐름 이해</h2>
 
-<h3>주요 내용</h3>
+        <h3>주요 내용</h3>
 
-<ul>
-<li>브라우저와 JavaScript 실행 환경</li>
-<li><code>&lt;script&gt;</code> 태그의 실행 시점</li>
-<li>Console 사용법</li>
-</ul>
+        <ul>
+          <li>브라우저와 JavaScript 실행 환경</li>
+          <li><code>&lt;script&gt;</code> 태그의 실행 시점</li>
+          <li>Console 사용법</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h1>Day 2 (화 · 6시간)</h1>
+        <h1>Day 2 (화 · 6시간)</h1>
 
-<h2>JavaScript 데이터와 이벤트의 기본 구조</h2>
+        <h2>JavaScript 데이터와 이벤트의 기본 구조</h2>
 
-<h3>주요 내용</h3>
+        <h3>주요 내용</h3>
 
-<ul>
-<li>값과 변수의 개념</li>
-<li>연산자</li>
-<li>제어문</li>
-<li>객체(Object)</li>
-<li>배열(Array)</li>
-<li>함수(Function)</li>
-<li>이벤트 개념</li>
-<li>데이터 + 함수 + 이벤트 구조</li>
-</ul>
+        <ul>
+          <li>값과 변수의 개념</li>
+          <li>연산자</li>
+          <li>제어문</li>
+          <li>객체(Object)</li>
+          <li>배열(Array)</li>
+          <li>함수(Function)</li>
+          <li>이벤트 개념</li>
+          <li>데이터 + 함수 + 이벤트 구조</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h1>Day 3 (수 · 6시간)</h1>
+        <h1>Day 3 (수 · 6시간)</h1>
 
-<h2>DOM과 이벤트 기반 UI 제어</h2>
+        <h2>DOM과 이벤트 기반 UI 제어</h2>
 
-<h3>주요 내용</h3>
+        <h3>주요 내용</h3>
 
-<ul>
-<li>DOM 개념</li>
-<li>HTML 요소 선택</li>
-<li>이벤트 처리</li>
-<li>DOM 조작 실습</li>
-</ul>
+        <ul>
+          <li>DOM 개념</li>
+          <li>HTML 요소 선택</li>
+          <li>이벤트 처리</li>
+          <li>DOM 조작 실습</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h1>Day 4 (목 · 6시간)</h1>
+        <h1>Day 4 (목 · 6시간)</h1>
 
-<h2>프론트엔드 도구의 진화와 Vue 맛보기</h2>
+        <h2>프론트엔드 도구의 진화와 Vue 맛보기</h2>
 
-<blockquote>
-  <p>DOM 직접 제어 방식의 한계를 이해하고,<br />
-  프레임워크가 왜 등장했는지를 설명하기 위한 개념 수업</p>
-</blockquote>
+        <blockquote>
+          <p>DOM 직접 제어 방식의 한계를 이해하고,<br />
+            프레임워크가 왜 등장했는지를 설명하기 위한 개념 수업</p>
+        </blockquote>
 
-<h3>주요 내용</h3>
+        <h3>주요 내용</h3>
 
-<ul>
-<li>DOM 직접 제어의 한계</li>
-<li>jQuery / Vue / React 개념 비교</li>
-<li>상태 기반 UI 개념 소개</li>
-<li>Vue 구조 맛보기</li>
-</ul>
+        <ul>
+          <li>DOM 직접 제어의 한계</li>
+          <li>jQuery / Vue / React 개념 비교</li>
+          <li>상태 기반 UI 개념 소개</li>
+          <li>Vue 구조 맛보기</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h1>Day 5 (금 · 3시간)</h1>
+        <h1>Day 5 (금 · 3시간)</h1>
 
-<h2>Vue.js 실습 (CDN 방식)</h2>
+        <h2>Vue.js 실습 (CDN 방식)</h2>
 
-<blockquote>
-  <p>Vue 문법 학습이 목적이 아니라,<br />
-  <strong>상태 기반 UI 흐름을 체험하기 위한 최소 실습</strong></p>
-</blockquote>
+        <blockquote>
+          <p>Vue 문법 학습이 목적이 아니라,<br />
+            <strong>상태 기반 UI 흐름을 체험하기 위한 최소 실습</strong>
+          </p>
+        </blockquote>
 
-<h3>주요 내용</h3>
+        <h3>주요 내용</h3>
 
-<ul>
-<li>Vue CDN 구성</li>
-<li>data / v-model / v-for / @click</li>
-<li>Todo 실습</li>
-<li>JavaScript 방식과 비교</li>
-</ul>
+        <ul>
+          <li>Vue CDN 구성</li>
+          <li>data / v-model / v-for / @click</li>
+          <li>Todo 실습</li>
+          <li>JavaScript 방식과 비교</li>
+        </ul>
 
-<hr />
+        <hr />
 
-<h2>강의 전체 목표 요약</h2>
+        <h2>강의 전체 목표 요약</h2>
 
-<ul>
-<li>JavaScript 실행 흐름 이해</li>
-<li>데이터와 동작 구조 이해</li>
-<li>DOM과 이벤트 관계 이해</li>
-<li>프레임워크 등장 이유 설명</li>
-</ul>
+        <ul>
+          <li>JavaScript 실행 흐름 이해</li>
+          <li>데이터와 동작 구조 이해</li>
+          <li>DOM과 이벤트 관계 이해</li>
+          <li>프레임워크 등장 이유 설명</li>
+        </ul>
 
-        <div class="footer">생성 시각: 2026-01-11 08:14</div>
+        <div class="footer">© 2026 한국IT교육원. All rights reserved.</div>
       </article>
     </main>
   </div>
-  
-<script>
-(function(){
-  function addCopyButtons(){
-    document.querySelectorAll('pre').forEach(function(pre){
-      if(pre.querySelector('.copy-btn')) return;
-      var btn=document.createElement('button');
-      btn.className='copy-btn';
-      btn.type='button';
-      btn.textContent='복사';
-      btn.addEventListener('click', function(){
-        var code=pre.querySelector('code');
-        var text=code ? code.innerText : pre.innerText;
-        navigator.clipboard.writeText(text).then(function(){
-          btn.textContent='복사됨';
-          setTimeout(function(){btn.textContent='복사';}, 900);
-        }, function(){
-          btn.textContent='실패';
-          setTimeout(function(){btn.textContent='복사';}, 900);
-        });
-      });
-      pre.appendChild(btn);
-    });
-  }
-  addCopyButtons();
-})();
-</script>
+
+  <script src="js/common.js"></script>
+
 
 </body>
+
 </html>
