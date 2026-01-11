@@ -186,6 +186,7 @@
           <p>체크 포인트</p>
           <ul>
             <li>Console에 오류 메시지가 출력된다</li>
+            <li><code>Uncaught ReferenceError: x is not defined</code> : 선언되지 않은 변수 x를 사용했고, 예외 처리가 없어 실행이 멈췄다.</li>
             <li>오류 메시지가 문제 해결의 단서가 됨을 인식한다</li>
           </ul>
           <hr />
@@ -271,10 +272,12 @@
           </ol>
           <pre><code class="language-javascript">document.body.innerHTML = &quot;&lt;h2&gt;JavaScript가 바꾼 화면&lt;/h2&gt;&quot;;
 </code></pre>
+          <p><code>document.body.innerHTML</code>: DOM을 문자열로 읽고 쓰게 해주는 속성</p>
           <p>체크 포인트</p>
           <ul>
             <li>기존 <code>&lt;h1&gt;</code>이 사라지고 <code>&lt;h2&gt;</code>가 나타난다</li>
             <li>HTML 파일을 수정한 게 아니라, 브라우저 메모리의 DOM 내용을 바꾼 것이다</li>
+            <li>페이지 소스 보기로는 바뀐 내용을 확인할 수 없다</li>
           </ul>
           <hr />
           <h3>Step 4. 바뀐 DOM 값 출력</h3>
@@ -289,10 +292,26 @@
             <li>DOM이 바뀌면 화면도 함께 바뀐다는 연결을 확인한다</li>
           </ul>
           <hr />
+          <h3>Step 5. DOM 요소를 직접 생성하기 (createElement)</h3>
+          <ol>
+            <li>아래 코드를 작성하고 새로고침한다.</li>
+          </ol>
+          <pre><code class="language-javascript">const h2 = document.createElement("h2");
+h2.textContent = "createElement로 만든 요소";
+document.body.appendChild(h2);
+</code></pre>
+          <p>체크 포인트</p>
+          <ul>
+            <li>새로운 <code>&lt;h2&gt;</code> 요소가 화면에 나타난다</li>
+            <li><code>createElement</code>는 DOM 요소를 직접 생성하는 메서드이다</li>
+            <li><code>appendChild</code>는 생성한 요소를 DOM에 붙이는 메서드이다</li>
+          </ul>
+          <hr />
           <h3>정리</h3>
           <ul>
             <li>JavaScript는 화면을 직접 그리는 게 아니라 DOM을 바꾼다</li>
             <li>DOM이 바뀌면 브라우저가 다시 렌더링하여 화면에 반영한다</li>
+            <li>다른 사이트에서도 코드를 실행해본다</li>
           </ul>
           <hr />
           <h2>6. JavaScript 실행 시점과 <code>&lt;script&gt;</code> 위치</h2>
